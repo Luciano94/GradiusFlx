@@ -19,16 +19,16 @@ class Player extends FlxSprite
 	{
 		super.update(elapsed);
 		
-		velocty.set(Reg.cameraSpeed, 0);
+		velocity.set(Reg.cameraSpeed, 0);
 		
 		if (FlxG.keys.pressed.UP)
 			velocity.y -= speed;
 		if (FlxG.keys.pressed.DOWN)
 			velocity.y += speed;
 		if (FlxG.keys.pressed.LEFT)
-			velocity.x -= speed);
+			velocity.x -= speed;
 		if (FlxG.keys.pressed.RIGHT)
-			velocity.
+			velocity.x += speed;
 	}
 	
 }

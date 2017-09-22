@@ -6,10 +6,6 @@ package;
  */
 class Reg 
 {
-
-	public function new() 
-	{
-		
-	}
-	
+	static public var cameraSpeed:Int = 50;
+	static public var playerNormalSpeed:Int = 100;
 }
