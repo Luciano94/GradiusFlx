@@ -29,7 +29,7 @@ class Bala extends FlxSprite
 	{
 		super.update(elapsed);
 		
-		if (x > FlxG.width)
+		if (x > FlxG.width || y<0) // Puse 'y<0' para cuando el PUp 'doble' esté activado
 			this.kill();
 	}
 	

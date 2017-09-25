@@ -14,10 +14,10 @@ class Player extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		
+		loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
 		speed = Reg.playerNormalSpeed;
 		framesEntreBala = Reg.playerFramesEntreBala;
-		bala = new Bala();
+		bala = new Bala(this.x + 16, this.y + 5);
 		FlxG.state.add(bala);
 	}
 	
@@ -27,16 +27,9 @@ class Player extends FlxSprite
 		
 		velocity.set(Reg.cameraSpeed, 0);
 		
-		if (FlxG.keys.pressed.UP) // Movimiento
-			velocity.y -= speed;
-		if (FlxG.keys.pressed.DOWN)
-			velocity.y += speed;
-		if (FlxG.keys.pressed.LEFT)
-			velocity.x -= speed;
-		if (FlxG.keys.pressed.RIGHT)
-			velocity.x += speed;
-		
-			disparo();
+		movimiento();
+		colision();
+		disparo();
 	}
 	
 	function get_bala():Bala 
@@ -44,14 +37,36 @@ class Player extends FlxSprite
 		return bala;
 	}
 	
+	function movimiento():Void 
+	{
+		if (FlxG.keys.pressed.UP)
+			velocity.y -= speed;
+		if (FlxG.keys.pressed.DOWN)
+			velocity.y += speed;
+		if (FlxG.keys.pressed.LEFT)
+			velocity.x -= speed;
+		if (FlxG.keys.pressed.RIGHT)
+			velocity.x += speed;
+	}
+	
 	function disparo():Void 
 	{
 	framesEntreBala++;
-	if (FlxG.keys.pressed.X && framesEntreBala == 10){
-		bala.reset(this.x + 16, this.y + 5);
+	if (FlxG.keys.pressed.X && framesEntreBala >= 10){
+		//bala.reset(this.x + 16, this.y + 5);
+		get_bala();
+		bala = new Bala(this.x + 16, this.y + 5);
 		bala.velocity.x = Reg.playerBalaSpeed;
 		framesEntreBala = 0;
 	}
+	bala.velocity.x = Reg.playerBalaSpeed;
 	}
 	
+	function colision():Void 
+	{
+		if (x == 0 || x == FlxG.width)
+			velocity.x = 0;
+		if (y == 0 || y == FlxG.height)
+			velocity.y = 0;
+	}
 }
