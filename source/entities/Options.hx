@@ -1,17 +1,21 @@
 package entities;
 
-import entities.Bala;
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.FlxG;
+import entities.Bala;
 
-class Player extends FlxSprite 
+/**
+ * ...
+ * @author holis
+ */
+class Options extends FlxSprite 
 {
 	private var speed:Int;
 	private var framesEntreBala:Int;
 	public var bala(get, null):Bala;
-	private var powerUpState:Int;
-	
+	private var powerUpState: Int;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
@@ -20,31 +24,42 @@ class Player extends FlxSprite
 		framesEntreBala = Reg.playerFramesEntreBala;
 		bala = new Bala(this.x + 16, this.y + 5);
 		powerUpState = 0;
-		FlxG.state.add(bala);
 	}
 	
-	override public function update(elapsed:Float):Void
+	/*function setPlayer(p:Player)
+	{
+		
+	}*/
+	
+	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
 		
-		velocity.set(Reg.cameraSpeed, 0);
-		
-		movimiento();
+		optionMovment();
 		colision();
-		disparo();
-	}
-	
-	function powerUpCollision()
-	{
-		powerUpState++;
+		
 	}
 	
 	function get_bala():Bala 
 	{
 		return bala;
 	}
+		
+	function disparo():Void 
+	{
+		framesEntreBala++;
+		if (FlxG.keys.pressed.X && framesEntreBala >= 10)
+		{
+			//bala.reset(this.x + 16, this.y + 5);
+			get_bala();
+			bala = new Bala(this.x + 16, this.y + 5);
+			bala.velocity.x = Reg.playerBalaSpeed;
+			framesEntreBala = 0;
+		}
+		bala.velocity.x = Reg.playerBalaSpeed;
+	}
 	
-	function movimiento():Void 
+	function optionMovment():Void
 	{
 		if (FlxG.keys.pressed.UP)
 			velocity.y -= speed;
@@ -54,19 +69,6 @@ class Player extends FlxSprite
 			velocity.x -= speed;
 		if (FlxG.keys.pressed.RIGHT)
 			velocity.x += speed;
-	}
-	
-	function disparo():Void 
-	{
-	framesEntreBala++;
-	if (FlxG.keys.pressed.X && framesEntreBala >= 10){
-		//bala.reset(this.x + 16, this.y + 5);
-		get_bala();
-		bala = new Bala(this.x + 16, this.y + 5);
-		bala.velocity.x = Reg.playerBalaSpeed;
-		framesEntreBala = 0;
-	}
-	bala.velocity.x = Reg.playerBalaSpeed;
 	}
 	
 	function colision():Void 
