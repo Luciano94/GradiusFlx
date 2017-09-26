@@ -12,6 +12,7 @@ class Player extends FlxSprite
 	private var framesEntreBala:Int;
 	private var rTime:FlxRandom;
 	public var bala(get, null):Bala;
+	private var powerUpState:Int;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
@@ -20,6 +21,7 @@ class Player extends FlxSprite
 		speed = Reg.playerNormalSpeed;
 		framesEntreBala = Reg.playerFramesEntreBala;
 		bala = new Bala(this.x + 16, this.y + 5);
+		powerUpState = 0;
 		FlxG.state.add(bala);
 	}
 	
@@ -32,6 +34,11 @@ class Player extends FlxSprite
 		movimiento();
 		colision();
 		disparo();
+	}
+	
+	function powerUpCollision()
+	{
+		powerUpState++;
 	}
 	
 	function get_bala():Bala 
