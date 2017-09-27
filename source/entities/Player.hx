@@ -5,22 +5,24 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxRandom;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.group.FlxGroup.FlxTypedGroup;
 
 class Player extends FlxSprite 
 {
 	private var speed:Int;
 	private var framesEntreBala:Int;
 	private var rTime:FlxRandom;
-	public var bala(get, null):Bala;
 	private var powerUpState:Int;
+	private var balaArray:FlxTypedGroup<Bala>;
+	public var bala(get, null):Bala;
 	
-	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
+	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
 	{
-		super(X, Y, SimpleGraphic);
+		super(X, Y);
 		loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
+		balaArray = playerBalaArray;
 		speed = Reg.playerNormalSpeed;
 		framesEntreBala = Reg.playerFramesEntreBala;
-		bala = new Bala(this.x + 16, this.y + 5);
 		powerUpState = 0;
 		FlxG.state.add(bala);
 	}
@@ -30,10 +32,19 @@ class Player extends FlxSprite
 		super.update(elapsed);
 		
 		velocity.set(Reg.cameraSpeed, 0);
+		framesEntreBala++;
 		
 		movimiento();
+		if(FlxG.keys.justPressed.X && framesEntreBala >= 8)
+			disparo();
 		colision();
-		disparo();
+	}
+	
+	function disparo() 
+	{
+		var nuevaBala = new Bala(x + 16, y + 5);
+		balaArray.add(nuevaBala);
+		framesEntreBala = 0;
 	}
 	
 	function powerUpCollision()
@@ -56,18 +67,6 @@ class Player extends FlxSprite
 			velocity.x -= speed;
 		if (FlxG.keys.pressed.RIGHT)
 			velocity.x += speed;
-	}
-	
-	function disparo():Void 
-	{
-		framesEntreBala++;
-		if (FlxG.keys.pressed.X && framesEntreBala >= 15)
-		{
-			bala.reset(this.x + 16, this.y + 5);
-			
-			framesEntreBala = 0;
-		}
-		bala.velocity.x = Reg.playerBalaSpeed;
 	}
 	
 	function colision():Void 

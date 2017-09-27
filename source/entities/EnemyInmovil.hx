@@ -21,7 +21,7 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		
 		//loadGraphic(AssetPaths."NombreDelEnemy");
 		rTime = new FlxRandom();
-		rNum = rTime.int(3, 5);
+		rNum = rTime.int(2, 4);
 	}
 	override public function update(elapsed:Float):Void
 	{
@@ -33,7 +33,7 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	function disparo():Void 
 	{
 		if (Reg.timer > 3+rNum) 
-			balaEne = new BalaEne(this.x, this.y); // Se va a modificar de acuerdo al tamaño del mismo
+			balaEne = new BalaEne(this.x, this.y); // Se va a modificar X|Y de acuerdo al tamaño del enemy
 	}
 	
 	function get_balaEne():BalaEne 

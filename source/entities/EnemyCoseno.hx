@@ -18,5 +18,9 @@ class EnemyCoseno extends FlxSprite
 		//loadGraphic(AssetPaths."NombreDelEnemy");
 		
 	}
-	
+	override public function update(elapsed:Float):Void 
+	{
+		super.update(elapsed);
+		
+	}
 }
