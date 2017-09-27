@@ -20,10 +20,11 @@ class Player extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
 	{
 		super(X, Y);
+		
 		loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
 		balaArray = playerBalaArray;
 		speed = Reg.playerNormalSpeed;
-		vidas = 4;
+		vidas = Reg.playerMaxLives;
 		framesEntreBala = Reg.playerFramesEntreBala;
 		powerUpState = 0;
 	}
@@ -36,16 +37,18 @@ class Player extends FlxSprite
 		framesEntreBala++;
 		
 		movimiento();
-		if(FlxG.keys.justPressed.X && framesEntreBala >= 5)
-			disparo();
+		disparo();
 		colision();
 	}
 	
 	function disparo() 
 	{
-		var nuevaBala = new Bala(x + 16, y + 5);
-		balaArray.add(nuevaBala);
-		framesEntreBala = 0;
+		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 5)
+		{
+			var nuevaBala = new Bala(x + width, y + height / 2);
+			balaArray.add(nuevaBala);
+			framesEntreBala = 0;
+		}
 	}
 	
 	function powerUpCollision()
@@ -72,20 +75,22 @@ class Player extends FlxSprite
 	
 	function colision():Void 
 	{
-		if (x>FlxG.width-width)
-			x = FlxG.width - width;
-		else if (x<FlxG.width - FlxG.width)
-			x = FlxG.width - FlxG.width;
+		//if (x > FlxG.width - width)
+			//x = FlxG.width - width;
+		//else 
+			//if (x < FlxG.width - FlxG.width)
+				//x = FlxG.width - FlxG.width;
 		
-		if (y>FlxG.height-height)
+		if (y > FlxG.height - height)
 			morido();
-		else if(y<FlxG.height - FlxG.height)
-			morido();
+		else 
+			if (y < FlxG.height - FlxG.height)
+				morido();
 	}
 	
 	function morido() 
 	{
-		
+		kill();
 	}
 	
 	function get_vidas():Int 

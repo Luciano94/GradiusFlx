@@ -1,9 +1,5 @@
 package;
 
-/**
- * ...
- * @author 
- */
 class Reg 
 {	// Cosas de Camara
 	static public var cameraSpeed:Int = 50;
