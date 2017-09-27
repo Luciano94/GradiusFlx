@@ -14,5 +14,4 @@ class Guide extends FlxSprite
 		makeGraphic(1, 1, 0x00000000);
 		velocity.x = Reg.cameraSpeed;
 	}
-	
 }

@@ -5,10 +5,6 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxG;
 import entities.Bala;
 
-/**
- * ...
- * @author holis
- */
 class Options extends FlxSprite 
 {
 	private var speed:Int;

@@ -21,7 +21,7 @@ class BalaEne extends FlxSprite
 	{
 		super.update(elapsed);
 		
-		if (x<0 || y<0 || x> FlxG.width || y>FlxG.height) 
+		if (x < 0 || y < 0 || x > FlxG.width || y > FlxG.height) 
 			kill();
 	}
 }

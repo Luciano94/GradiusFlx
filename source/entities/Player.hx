@@ -1,5 +1,6 @@
 package entities;
 
+import entities.Guide;
 import entities.Bala;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -13,9 +14,9 @@ class Player extends FlxSprite
 	private var vidas(get, null):Int;
 	private var framesEntreBala:Int;
 	private var balaArray:FlxTypedGroup<Bala>;
-	private var rTime:FlxRandom;
 	private var powerUpState:Int;
 	public var bala(get, null):Bala;
+	public var guide:Guide;
 	
 	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
 	{
@@ -27,6 +28,10 @@ class Player extends FlxSprite
 		vidas = Reg.playerMaxLives;
 		framesEntreBala = Reg.playerFramesEntreBala;
 		powerUpState = 0;
+		guide = new Guide(FlxG.width / 2, FlxG.height / 2);
+		
+		camera.follow(guide);
+		FlxG.state.add(guide);
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -38,10 +43,10 @@ class Player extends FlxSprite
 		
 		movimiento();
 		disparo();
-		colision();
+		checkBoundaries();
 	}
 	
-	function disparo() 
+	private function disparo() 
 	{
 		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 5)
 		{
@@ -51,17 +56,12 @@ class Player extends FlxSprite
 		}
 	}
 	
-	function powerUpCollision()
+	private function powerUpCollision()
 	{
 		powerUpState++;
 	}
 	
-	function get_bala():Bala 
-	{
-		return bala;
-	}
-	
-	function movimiento():Void 
+	private function movimiento():Void 
 	{
 		if (FlxG.keys.pressed.UP)
 			velocity.y -= speed;
@@ -73,28 +73,23 @@ class Player extends FlxSprite
 			velocity.x += speed;
 	}
 	
-	function colision():Void 
+	private function checkBoundaries():Void 
 	{
-		//if (x > FlxG.width - width)
-			//x = FlxG.width - width;
-		//else 
-			//if (x < FlxG.width - FlxG.width)
-				//x = FlxG.width - FlxG.width;
-		
-		if (y > FlxG.height - height)
-			morido();
-		else 
-			if (y < FlxG.height - FlxG.height)
-				morido();
+		if (x > guide.x + FlxG.width / 2)
+			x = guide.x + FlxG.width / 2;
+		if (x < guide.x - FlxG.width / 2)
+			x = guide.x - FlxG.width / 2;
+		if (y > FlxG.height - height || y < 0)
+			kill(); 
 	}
 	
-	function morido() 
-	{
-		kill();
-	}
-	
-	function get_vidas():Int 
+	public function get_vidas():Int 
 	{
 		return vidas;
+	}
+	
+		public function get_bala():Bala 
+	{
+		return bala;
 	}
 }
