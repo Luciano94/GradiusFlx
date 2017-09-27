@@ -1,5 +1,6 @@
 package entities;
 
+import entities.Player;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxG;
@@ -20,13 +21,13 @@ class EnemyPerseguidor extends FlxSprite
 		animation.add("abajo", [2]);
 		animation.play("idle");*/
 	}
-	override public function update(elapsed:Float):Void
+	/*override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		//movimiento();
+		movimiento();
 	}
 	
-	/*function movimiento():Void 
+	function movimiento():Void 
 	{
 		velocity.x = -Reg.enemySpeedXY;
 		if (y == Player.Y)

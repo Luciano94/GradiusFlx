@@ -7,6 +7,7 @@ import entities.BalaEne;
 import entities.EnemyInmovil;
 import entities.EnemyPerseguidor;
 import entities.EnemyCoseno;
+import entities.Vidas;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -15,6 +16,7 @@ class PlayState extends FlxState
 {
 	private var player:Player;
 	private var option:Options;
+	private var vidas:FlxTypedGroup<Vidas>;
 	public var playerBalas:FlxTypedGroup<Bala>;
 	
 	
@@ -26,6 +28,7 @@ class PlayState extends FlxState
 		add(playerBalas);
 		player = new Player(10, FlxG.height / 2, playerBalas);
 		add(player);
+		vidas = new FlxTypedGroup<Vidas>;
 		//option = new Options(10, FlxG.height / 2);
 		//add(option);
 	}
@@ -33,11 +36,16 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		
+		playerTriggered();
 		colEnemyPared();
 	}
 	
 	public function colEnemyPared() 
+	{
+		
+	}
+	
+	public function playerTriggered() 
 	{
 		
 	}

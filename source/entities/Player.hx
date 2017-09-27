@@ -10,10 +10,11 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 class Player extends FlxSprite 
 {
 	private var speed:Int;
+	private var vidas(get, null):Int;
 	private var framesEntreBala:Int;
+	private var balaArray:FlxTypedGroup<Bala>;
 	private var rTime:FlxRandom;
 	private var powerUpState:Int;
-	private var balaArray:FlxTypedGroup<Bala>;
 	public var bala(get, null):Bala;
 	
 	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
@@ -22,9 +23,9 @@ class Player extends FlxSprite
 		loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
 		balaArray = playerBalaArray;
 		speed = Reg.playerNormalSpeed;
+		vidas = 4;
 		framesEntreBala = Reg.playerFramesEntreBala;
 		powerUpState = 0;
-		FlxG.state.add(bala);
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -35,7 +36,7 @@ class Player extends FlxSprite
 		framesEntreBala++;
 		
 		movimiento();
-		if(FlxG.keys.justPressed.X && framesEntreBala >= 8)
+		if(FlxG.keys.justPressed.X && framesEntreBala >= 5)
 			disparo();
 		colision();
 	}
@@ -73,12 +74,22 @@ class Player extends FlxSprite
 	{
 		if (x>FlxG.width-width)
 			x = FlxG.width - width;
-		if (x<FlxG.width - FlxG.width)
+		else if (x<FlxG.width - FlxG.width)
 			x = FlxG.width - FlxG.width;
 		
 		if (y>FlxG.height-height)
-			y = FlxG.height - height;
-		if (y<FlxG.height - FlxG.height)
-			y = FlxG.height - FlxG.height;
+			morido();
+		else if(y<FlxG.height - FlxG.height)
+			morido();
+	}
+	
+	function morido() 
+	{
+		
+	}
+	
+	function get_vidas():Int 
+	{
+		return vidas;
 	}
 }
