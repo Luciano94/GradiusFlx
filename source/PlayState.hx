@@ -16,9 +16,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 class PlayState extends FlxState
 {
 	private var player:Player;
-	//private var guide:Guide;
 	private var option:Options;
 	public var playerBalas:FlxTypedGroup<Bala>;
+	private var background:FlxSprite;	// Temporary background.
 	
 	
 	override public function create():Void
@@ -27,11 +27,12 @@ class PlayState extends FlxState
 
 		playerBalas = new FlxTypedGroup<Bala>();
 		player = new Player(10, FlxG.height / 2, playerBalas);
-		//guide = new Guide(FlxG.width / 2, FlxG.height / 2);
-		
-		//add(guide);
+		background = new FlxSprite(0, 0, AssetPaths.background__png);
+
+		add(background);
 		add(playerBalas);
 		add(player);
+		
 		
 		
 		//option = new Options(10, FlxG.height / 2);

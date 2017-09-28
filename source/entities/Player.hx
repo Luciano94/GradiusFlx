@@ -75,8 +75,8 @@ class Player extends FlxSprite
 	
 	private function checkBoundaries():Void 
 	{
-		if (x > guide.x + FlxG.width / 2)
-			x = guide.x + FlxG.width / 2;
+		if (x > guide.x + FlxG.width / 2 - width)
+			x = guide.x + FlxG.width / 2 - width;
 		if (x < guide.x - FlxG.width / 2)
 			x = guide.x - FlxG.width / 2;
 		if (y > FlxG.height - height || y < 0)
