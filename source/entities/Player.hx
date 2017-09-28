@@ -22,7 +22,7 @@ class Player extends FlxSprite
 	{
 		super(X, Y);
 		
-		loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
+		loadGraphic(AssetPaths.spaceship__png, true, 32, 24);
 		balaArray = playerBalaArray;
 		speed = Reg.playerNormalSpeed;
 		vidas = Reg.playerMaxLives;
@@ -32,6 +32,13 @@ class Player extends FlxSprite
 		
 		camera.follow(guide);
 		FlxG.state.add(guide);
+		
+		animation.add("idle", [0, 1, 2], 6, true);
+		animation.add("moveUp", [5]);
+		animation.add("moveDown", [6]);
+		animation.add("moveBackwards", [4]);
+		animation.add("moveForward", [3]);
+		
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -40,6 +47,7 @@ class Player extends FlxSprite
 		
 		velocity.set(Reg.cameraSpeed, 0);
 		framesEntreBala++;
+		animation.play("idle");
 		
 		movimiento();
 		disparo();
@@ -64,13 +72,25 @@ class Player extends FlxSprite
 	private function movimiento():Void 
 	{
 		if (FlxG.keys.pressed.UP)
+		{
 			velocity.y -= speed;
+			animation.play("moveUp");
+		}
 		if (FlxG.keys.pressed.DOWN)
+		{
 			velocity.y += speed;
+			animation.play("moveDown");
+		}
 		if (FlxG.keys.pressed.LEFT)
+		{
 			velocity.x -= speed;
+			animation.play("moveBackwards");
+		}
 		if (FlxG.keys.pressed.RIGHT)
+		{
 			velocity.x += speed;
+			animation.play("moveForward");
+		}
 	}
 	
 	private function checkBoundaries():Void 

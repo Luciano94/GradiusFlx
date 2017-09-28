@@ -15,7 +15,7 @@ class Options extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
+		//loadGraphic(AssetPaths.spaceship__png, true, 32, 16);
 		speed = Reg.playerNormalSpeed;
 		framesEntreBala = Reg.playerFramesEntreBala;
 		bala = new Bala(this.x + 16, this.y + 5);
