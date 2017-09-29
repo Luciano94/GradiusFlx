@@ -16,14 +16,18 @@ class Player extends FlxSprite
 {
 	private var speed:Int;
 	private var faster:Int;
+	private var laser: Bool;
+	private var misil: Bool;
+	private var misilArray:FlxTypedGroup<Misil>;
+	private var framesEntreMisil:Int;
+	public var powerUpState:Int;
 	public var vidas(get, null):Int;
 	private var framesEntreBala:Int;
 	private var balaArray:FlxTypedGroup<Bala>;
-	private var powerUpState:Int;
 	public var bala(get, null):Bala;
 	private var state:State;
 	
-	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
+	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>, playermisilArray:FlxTypedGroup<Misil>) 
 	{
 		super(X, Y);
 		
@@ -39,8 +43,12 @@ class Player extends FlxSprite
 		balaArray = playerBalaArray;
 		framesEntreBala = Reg.playerFramesEntreBala;
 		/*Power Up*/
+		misilArray = playermisilArray;
+		framesEntreMisil = Reg.playerFramesEntreBala;
 		powerUpState = 0;
 		faster = speed * 2;
+		laser = false;
+		misil = false;
 		/*Animations*/
 		animation.add("idle", [0, 1, 2], 6, true);
 		animation.add("moveUp", [5]);
@@ -59,6 +67,7 @@ class Player extends FlxSprite
 			case State.Alive:
 				velocity.set(Reg.cameraSpeed, 0);
 				framesEntreBala++;
+				framesEntreMisil++;
 				animation.play("idle");
 				movimiento();
 				checkBoundaries();
@@ -75,10 +84,15 @@ class Player extends FlxSprite
 	/*-----------------------Player-----------------------*/
 	private function disparo():Void
 	{
-		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 5)
+		if (FlxG.keys.justPressed.SPACE && framesEntreBala >=10)
 		{
-			var nuevaBala = new Bala(x + width, y + height / 2);
-			
+			var nuevaBala = new Bala(x + width, y + height / 2, laser);
+			if (misil && framesEntreMisil >= 50)
+			{
+				var	nuevoMisil = new Misil(x + (width / 2), y + height / 2);
+				misilArray.add(nuevoMisil);
+				framesEntreMisil = 0;
+			}
 			balaArray.add(nuevaBala);
 			framesEntreBala = 0;
 		}
@@ -160,22 +174,53 @@ class Player extends FlxSprite
 		return bala;
 	}
 	/*-----------------------Power Up-----------------------*/
-	public function powerUpCollision():Void
+	/*Collision*/
+	public function powerUpCollision()
 	{
 		powerUpState++;
 	}
 	
+	/*Spped*/
 	public function doubleSpeed():Void
 	{
 		speed = faster;
 	}
-		
+	
+	public function isDoubleSpeed():Bool
+	{
+		if (speed == faster)
+			return true;
+		return false;
+	}
+	
+	/*Laser*/
+	public function actlaser():Void
+	{
+		laser = true;
+	}
+	
+	public function isLaser():Bool
+	{
+		return laser;
+	}
+	
+	/*misil*/
+	public function actMisil():Void
+	{
+		misil = true;
+	}
+	public function isMisil():Bool
+	{
+		return misil;
+	}
+	
+	/*state*/
 	public function getPowerUpState():Int
 	{
 		return powerUpState;
 	}
 	
-	public function resetPowerUpState():Void
+	public function resetPowerUpState()
 	{
 		powerUpState = 0;
 	}

@@ -1,6 +1,7 @@
 package states;
 
 import entities.Guide;
+import entities.Misil;
 import entities.Options;
 import entities.PowerUp;
 import entities.Player;
@@ -19,8 +20,11 @@ import flixel.util.FlxColor;
 class PlayState extends FlxState
 {
 	private var player:Player;
-	private var option:Options;
+	private var opt1:Options;
+	private var opt2:Options;
+	private var powerUpState:Int;
 	public var playerBalas:FlxTypedGroup<Bala>;
+	public var playerMisiles:FlxTypedGroup<Misil>;
 	private var background:FlxSprite;	// Temporary background.
 	private var guide:FlxSprite;
 	private var pwUp:FlxTypedGroup<PowerUp>;
@@ -41,7 +45,8 @@ class PlayState extends FlxState
 		super.create();
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
-		player = new Player(10, FlxG.height / 2, playerBalas);
+		playerMisiles = new FlxTypedGroup<Misil>();
+		player = new Player(10, FlxG.height / 2, playerBalas, playerMisiles);
 		Reg.playerRef = player;
 		
 		/*Background*/
@@ -51,6 +56,8 @@ class PlayState extends FlxState
 		pwUp = new FlxTypedGroup<PowerUp>();
 		pwUp.add(new PowerUp(100, 100));
 		pwUp.add(new PowerUp(200, 100));
+		pwUp.add(new PowerUp(250, 150));
+		pwUp.add(new PowerUp(220, 150));
 		
 		/*CAMERA*/
 		guide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
@@ -93,6 +100,7 @@ class PlayState extends FlxState
 		add(guide);
 		add(background);
 		add(playerBalas);
+		add(playerMisiles);
 		add(player);
 		add(pwUp);
 		enemyPerseguidor.add(eP);
@@ -147,7 +155,7 @@ class PlayState extends FlxState
 	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
 	{
 		player.powerUpCollision();
-		pwUp.remove(power);
+		power.kill();
 	}
 	
 	public function colEnemyPared():Void
@@ -160,22 +168,34 @@ class PlayState extends FlxState
 		
 	}
 	/*-----------------------Power UP-----------------------*/
-	private function sistemaPowerUp():Void
+	private function sistemaPowerUp()
 	{
 		if (FlxG.keys.justPressed.C)
 		{
 			switch (player.getPowerUpState()) 
 			{
-				case 0:
 				case 1:
+					player.resetPowerUpState();
 					player.doubleSpeed();
-					player.resetPowerUpState();
 				case 2:
-					option = new Options(player.x - player.width, player.y, playerBalas, player);
-					add(option);
 					player.resetPowerUpState();
+					player.actlaser();
+				case 3:
+					player.resetPowerUpState();
+					player.actMisil();
+				case 4:
+					player.resetPowerUpState();
+					if (opt1 != null)
+					{
+						opt2 = new Options (opt1.x - opt1.width, opt1.y, playerBalas, playerMisiles, opt1);
+						add(opt2);
+					}	
+					else
+					{
+						opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
+						add(opt1);
+					}
 				default:
-					
 			}
 		}
 	}
