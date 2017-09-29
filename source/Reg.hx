@@ -1,4 +1,5 @@
 package;
+import entities.Player;
 
 class Reg 
 {	// Cosas de Camara
@@ -14,9 +15,14 @@ class Reg
 	static inline public var playerMaxLives = 3;
 	static public var playerBalaSpeed:Int = 250;
 	static public var playerFramesEntreBala:Int = 0;
+	static public var playerRef:Player;
 	// Cosas de EnemyInmovil
 	static public var enemyBalaSpeed:Int = 60;
 	static public var timer:Float = 0;
 	// Cosas de EnemyPerseguidor
-	static public var enemySpeedXY = 50; // Se va a usar como módulo
+	static public var enemySpeedX = 25; 
+	static public var enemySpeedY = 40;
+	// Cosas de EnemyCoseno
+	static public var enemyCSpeedX = 30;
+	static public var enemyCSpeedY = -120;
 }

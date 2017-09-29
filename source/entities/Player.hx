@@ -20,6 +20,7 @@ class Player extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
 	{
 		super(X, Y);
+		
 		/*Graphic*/
 		loadGraphic(AssetPaths.spaceship__png, true, 32, 24);
 		/*Speed*/

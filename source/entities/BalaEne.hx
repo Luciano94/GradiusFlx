@@ -14,7 +14,7 @@ class BalaEne extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		//loadGraphic(AssetPaths.balaEne__png);
+		loadGraphic(AssetPaths.balaEne__png, true, 4, 4);
 	}
 	
 	override public function update (elapsed:Float):Void

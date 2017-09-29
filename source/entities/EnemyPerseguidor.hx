@@ -15,13 +15,18 @@ class EnemyPerseguidor extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		/*loadGraphic(AssetPaths.enemyPerseguidor__png, false, 32, 16);
+		loadGraphic(AssetPaths.enemyPerseguidor__png, true, 32, 16);
+		
+		width = 15;
+		height = 14;
+		offset.set(9, 1);
+		
 		animation.add("idle", [0]);
 		animation.add("arriba", [1]);
 		animation.add("abajo", [2]);
-		animation.play("idle");*/
+		animation.play("idle");
 	}
-	/*override public function update(elapsed:Float):Void
+	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		movimiento();
@@ -29,22 +34,25 @@ class EnemyPerseguidor extends FlxSprite
 	
 	function movimiento():Void 
 	{
-		velocity.x = -Reg.enemySpeedXY;
-		if (y == Player.Y)
+		
+		if (y >= Reg.playerRef.y + 2)
 		{
-			velocity.y = 0;
-			animation.play("idle");
-		}
-		else if (y <= Player.Y)
-		{
-			velocity.y = -Reg.enemySpeedXY;
+			velocity.x = -Reg.enemySpeedX;
+			velocity.y = -Reg.enemySpeedY;
 			animation.play("arriba");
+		}
+		else if (y <= Reg.playerRef.y - 2)
+		{
+			velocity.x = -Reg.enemySpeedX;
+			velocity.y = Reg.enemySpeedY;
+			animation.play("abajo");
 		}
 		else
 		{
-			velocity.y = Reg.enemySpeedXY;
-			animation.play("abajo");
+			velocity.x = -Reg.enemySpeedX * 2.5;
+			velocity.y = 0;
+			animation.play("idle");
 		}
-	}*/
+	}
 	
 }

@@ -24,6 +24,12 @@ class PlayState extends FlxState
 	private var background:FlxSprite;	// Temporary background.
 	private var guide:FlxSprite;
 	private var pwUp:FlxTypedGroup<PowerUp>;
+	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
+	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
+	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
+	public var eP:EnemyPerseguidor;
+	public var eI:EnemyInmovil;
+	public var eC:EnemyCoseno;
 	private var lives:FlxText;
 	private var score:FlxText;
 	private var highestScore:FlxText;
@@ -36,6 +42,7 @@ class PlayState extends FlxState
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		player = new Player(10, FlxG.height / 2, playerBalas);
+		Reg.playerRef = player;
 		
 		/*Background*/
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
@@ -51,6 +58,15 @@ class PlayState extends FlxState
 		guide.velocity.x = Reg.cameraSpeed;
 		FlxG.camera.follow(guide);
 		
+		/*ENEMY*/
+		eP = new EnemyPerseguidor(200, 200);
+		eI = new EnemyInmovil(100, 200);
+		eC = new EnemyCoseno(220, 150);
+		enemyPerseguidor = new FlxTypedGroup<EnemyPerseguidor>();
+		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
+		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
+
+		
 		/*HUD*/
 		lives = new FlxText(0, 0, 256, "Lives: ", 8);
 		score = new FlxText(0, 0, 256, "Score: ", 8);
@@ -58,16 +74,16 @@ class PlayState extends FlxState
 		paused = new FlxText(0, 0, 256, "Paused", 8);
 		gameOver = new FlxText(0, 0, 256, "Game Over", 8);
 		
-		lives.setFormat(FlxColor.WHITE, FlxTextAlign.LEFT);
-		score.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
-		highestScore.setFormat(FlxColor.WHITE, FlxTextAlign.RIGHT);
-		paused.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
-		gameOver.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
+		lives.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.LEFT);
+		score.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
+		highestScore.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.RIGHT);
+		paused.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
+		gameOver.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
 		
 		paused.visible = false;
 		gameOver.visible = false;
 		
-		lives.follow(camera);
+		lives.scrollFactor.x = 0;
 		
 		/*ADD*/
 		add(guide);
@@ -75,6 +91,12 @@ class PlayState extends FlxState
 		add(playerBalas);
 		add(player);
 		add(pwUp);
+		enemyPerseguidor.add(eP);
+		enemyInmovil.add(eI);
+		enemyCoseno.add(eC);
+		add(enemyPerseguidor);
+		add(enemyInmovil);
+		add(enemyCoseno);
 		add(lives);
 		add(score);
 		add(highestScore);
@@ -97,6 +119,12 @@ class PlayState extends FlxState
 			/*Collision*/
 			colEnemyPared();
 			FlxG.overlap(pwUp, player, colPwUpPlayer);
+			if (FlxG.overlap(enemyInmovil, player))
+				player.kill();
+			if (FlxG.overlap(enemyPerseguidor, player))
+				player.kill();
+			if (FlxG.overlap(enemyCoseno, player))
+				player.kill();
 			checkBoundaries();
 		}
 		
