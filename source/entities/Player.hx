@@ -11,7 +11,7 @@ class Player extends FlxSprite
 {
 	private var speed:Int;
 	private var faster:Int;
-	private var vidas(get, null):Int;
+	public var vidas(get, null):Int;
 	private var framesEntreBala:Int;
 	private var balaArray:FlxTypedGroup<Bala>;
 	private var powerUpState:Int;

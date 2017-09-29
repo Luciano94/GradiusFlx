@@ -14,6 +14,7 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
@@ -35,23 +36,39 @@ class PlayState extends FlxState
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		player = new Player(10, FlxG.height / 2, playerBalas);
+		
 		/*Background*/
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
+		
 		/*Power UP*/
 		pwUp = new FlxTypedGroup<PowerUp>();
 		pwUp.add(new PowerUp(100, 100));
 		pwUp.add(new PowerUp(200, 100));
+		
 		/*CAMERA*/
 		guide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
 		guide.makeGraphic(1, 1, 0x00000000);
 		guide.velocity.x = Reg.cameraSpeed;
 		FlxG.camera.follow(guide);
+		
 		/*HUD*/
-		lives = new FlxText(0, 0, 256, 8);
-		score = new FlxText(0, 0, 256, 8);
-		highestScore = new FlxText(0, 0, 256, 8);
-		paused = new FlxText(0, 0, 256, 8);
-		gameOver = new FlxText(0, 0, 256, 8);
+		lives = new FlxText(0, 0, 256, "Lives: ", 8);
+		score = new FlxText(0, 0, 256, "Score: ", 8);
+		highestScore = new FlxText(0, 0, 256, "Best: ", 8);
+		paused = new FlxText(0, 0, 256, "Paused", 8);
+		gameOver = new FlxText(0, 0, 256, "Game Over", 8);
+		
+		lives.setFormat(FlxColor.WHITE, FlxTextAlign.LEFT);
+		score.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
+		highestScore.setFormat(FlxColor.WHITE, FlxTextAlign.RIGHT);
+		paused.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
+		gameOver.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
+		
+		paused.visible = false;
+		gameOver.visible = false;
+		
+		lives.follow(camera);
+		
 		/*ADD*/
 		add(guide);
 		add(background);
@@ -61,6 +78,8 @@ class PlayState extends FlxState
 		add(lives);
 		add(score);
 		add(highestScore);
+		add(paused);
+		add(gameOver);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -71,17 +90,24 @@ class PlayState extends FlxState
 			
 			/*Player*/
 			playerTriggered();
+			
 			/*Power UP*/
 			sistemaPowerUp();
+			
 			/*Collision*/
 			colEnemyPared();
 			FlxG.overlap(pwUp, player, colPwUpPlayer);
 			checkBoundaries();
 		}
 		
+		lives.text += player.vidas;
+		score.text += Reg.score;
+		highestScore.text += Reg.highestScore;
+		
 		if (FlxG.keys.justPressed.ENTER && !Reg.gameOver)
 		{
 			Reg.paused = !Reg.paused;
+			paused.visible = !paused.visible;
 		}
 	}
 	/*-----------------------Collision-----------------------*/
