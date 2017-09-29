@@ -29,7 +29,7 @@ class PlayState extends FlxState
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		player = new Player(10, FlxG.height / 2, playerBalas);
-		/*Backgraund*/
+		/*Background*/
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
 		/*Power UP*/
 		pwUp = new FlxTypedGroup<PowerUp>();
@@ -50,18 +50,27 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		super.update(elapsed);
-		/*Player*/
-		playerTriggered();
-		/*Power UP*/
-		sistemaPowerUp();
-		/*Collision*/
-		colEnemyPared();
-		FlxG.overlap(pwUp, player, colPwUpPlayer);
-		checkBoundaries();
+		if (!Reg.gameOver && !Reg.paused)
+		{
+			super.update(elapsed);
+			
+			/*Player*/
+			playerTriggered();
+			/*Power UP*/
+			sistemaPowerUp();
+			/*Collision*/
+			colEnemyPared();
+			FlxG.overlap(pwUp, player, colPwUpPlayer);
+			checkBoundaries();
+		}
+		
+		if (FlxG.keys.justPressed.ENTER && !Reg.gameOver)
+		{
+			Reg.paused = !Reg.paused;
+		}
 	}
 	/*-----------------------Collision-----------------------*/
-	private function checkBoundaries():Void 
+	private function checkBoundaries():Void // Consider adding this checking to the Player class.
 	{
 		if (player.x > guide.x + FlxG.width / 2 - player.width)
 			player.x = guide.x + FlxG.width / 2 - player.width;
@@ -71,23 +80,23 @@ class PlayState extends FlxState
 			player.kill(); 
 	}
 	
-	private function colPwUpPlayer(power: PowerUp, playa: Player)
+	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
 	{
-			player.powerUpCollision();
-			pwUp.remove(power);
+		player.powerUpCollision();
+		pwUp.remove(power);
 	}
 	
-	public function colEnemyPared() 
+	public function colEnemyPared():Void
 	{
 		
 	}
 	/*-----------------------Player-----------------------*/
-	public function playerTriggered() 
+	public function playerTriggered():Void
 	{
 		
 	}
 	/*-----------------------Power UP-----------------------*/
-	private function sistemaPowerUp()
+	private function sistemaPowerUp():Void
 	{
 		if (FlxG.keys.justPressed.C)
 		{
@@ -98,7 +107,7 @@ class PlayState extends FlxState
 					player.doubleSpeed();
 					player.resetPowerUpState();
 				case 2:
-					option = new Options(player.x - player.width, player.y,playerBalas, player);
+					option = new Options(player.x - player.width, player.y, playerBalas, player);
 					add(option);
 					player.resetPowerUpState();
 				default:

@@ -8,10 +8,6 @@ import flixel.math.FlxRandom;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
-/**
- * ...
- * @author ...
- */
 class Options extends Player 
 {
 	
@@ -25,23 +21,22 @@ class Options extends Player
 		timerMov = 0;
 	}
 	
-	override function movimiento():Void 
-	{
-
-	}
-	
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
-		if (y > player.y - player.height)
-			velocity.y -= speed;
-		if (y < player.y + player.height)
-			velocity.y += speed;
-		if (x > player.x + player.width)
-			velocity.x -= speed + Reg.cameraSpeed;
-		if (x < player.x - player.width)
-			velocity.x += speed;
+		
+		movimiento();
 	}
-
 	
+	override function movimiento():Void 
+	{
+    	if (y > player.y - player.height)
+    		velocity.y -= speed;
+    	if (y < player.y + player.height)
+    		velocity.y += speed;
+    	if (x > player.x + player.width)
+    		velocity.x -= speed + Reg.cameraSpeed;
+    	if (x < player.x - player.width)
+    		velocity.x += speed;
+    }
 }

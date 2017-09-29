@@ -24,7 +24,7 @@ class Player extends FlxSprite
 		loadGraphic(AssetPaths.spaceship__png, true, 32, 24);
 		/*Speed*/
 		speed = Reg.playerNormalSpeed;
-		/*Lifes*/
+		/*Lives*/
 		vidas = Reg.playerMaxLives;
 		/*Bullets*/
 		balaArray = playerBalaArray;
@@ -38,6 +38,7 @@ class Player extends FlxSprite
 		animation.add("moveDown", [6]);
 		animation.add("moveBackwards", [4]);
 		animation.add("moveForward", [3]);
+		animation.add("explode", [7, 8, 9], 1, true);
 		
 	}
 	
@@ -84,6 +85,21 @@ class Player extends FlxSprite
 		{
 			velocity.x += speed;
 			animation.play("moveForward");
+		}
+	}
+	
+	override public function kill():Void
+	{
+		animation.play("explode");
+		
+		super.kill();
+		
+		if (vidas == 0)
+			Reg.gameOver = true;
+		else
+		{
+			vidas--;
+			reset(10, FlxG.height / 2);
 		}
 	}
 	
