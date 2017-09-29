@@ -68,11 +68,11 @@ class PlayState extends FlxState
 
 		
 		/*HUD*/
-		lives = new FlxText(0, 0, 256, "Lives: ", 8);
-		score = new FlxText(0, 0, 256, "Score: ", 8);
-		highestScore = new FlxText(0, 0, 256, "Best: ", 8);
-		paused = new FlxText(0, 0, 256, "Paused", 8);
-		gameOver = new FlxText(0, 0, 256, "Game Over", 8);
+		lives = new FlxText(0, 216, 256, "Lives: ", 8);
+		score = new FlxText(0, 216, 256, "Score: ", 8);
+		highestScore = new FlxText(0, 216, 256, "Best: ", 8);
+		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 8);
+		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 8);
 		
 		lives.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.LEFT);
 		score.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
@@ -84,6 +84,10 @@ class PlayState extends FlxState
 		gameOver.visible = false;
 		
 		lives.scrollFactor.x = 0;
+		score.scrollFactor.x = 0;
+		highestScore.scrollFactor.x = 0;
+		paused.scrollFactor.x = 0;
+		gameOver.scrollFactor.x = 0;
 		
 		/*ADD*/
 		add(guide);
@@ -125,12 +129,12 @@ class PlayState extends FlxState
 				player.kill();
 			if (FlxG.overlap(enemyCoseno, player))
 				player.kill();
-			checkBoundaries();
+			
 		}
 		
-		lives.text += player.vidas;
-		score.text += Reg.score;
-		highestScore.text += Reg.highestScore;
+		lives.text = "Lives: " + player.vidas;
+		score.text = "Score: " + Reg.score;
+		highestScore.text = "Best: " + Reg.highestScore;
 		
 		if (FlxG.keys.justPressed.ENTER && !Reg.gameOver)
 		{
@@ -139,15 +143,6 @@ class PlayState extends FlxState
 		}
 	}
 	/*-----------------------Collision-----------------------*/
-	private function checkBoundaries():Void // Consider adding this checking to the Player class.
-	{
-		if (player.x > guide.x + FlxG.width / 2 - player.width)
-			player.x = guide.x + FlxG.width / 2 - player.width;
-		if (player.x < guide.x - FlxG.width / 2)
-			player.x = guide.x - FlxG.width / 2;
-		if (player.y > FlxG.height - player.height || player.y < 0)
-			player.kill(); 
-	}
 	
 	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
 	{

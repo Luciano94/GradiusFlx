@@ -29,12 +29,12 @@ class Bala extends FlxSprite
 	{
 		super.update(elapsed);
 		
-		//checkBoundaries();	This method has to be fixed.
+		checkBoundaries();
 	}
 	
 	function checkBoundaries():Void 
 	{
-		if (x > FlxG.camera.camera.x + FlxG.width || y < 0) // Puse 'y<0' para cuando el PUp 'doble' esté activado
+		if (x > camera.scroll.x + FlxG.width || y < 0) // Puse 'y<0' para cuando el PUp 'doble' esté activado
 			kill();
 	}
 	
