@@ -1,12 +1,17 @@
 package entities;
 
 import entities.Bala;
+import entities.Player.State;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxRandom;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
+enum State
+{
+	Alive; Exploding; Destroyed;
+}
 class Player extends FlxSprite 
 {
 	private var speed:Int;
@@ -16,6 +21,7 @@ class Player extends FlxSprite
 	private var balaArray:FlxTypedGroup<Bala>;
 	private var powerUpState:Int;
 	public var bala(get, null):Bala;
+	private var state:State;
 	
 	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>) 
 	{
@@ -24,6 +30,8 @@ class Player extends FlxSprite
 		loadGraphic(AssetPaths.spaceship__png, true, 32, 24);
 		/*Speed*/
 		speed = Reg.playerNormalSpeed;
+		/*State*/
+		state = State.Alive;
 		/*Lives*/
 		vidas = Reg.playerMaxLives;
 		/*Bullets*/
@@ -38,23 +46,33 @@ class Player extends FlxSprite
 		animation.add("moveDown", [6]);
 		animation.add("moveBackwards", [4]);
 		animation.add("moveForward", [3]);
-		animation.add("explode", [7, 8, 9], 1, true);
-		
+		animation.add("explode", [7, 8, 9], 6, false);
 	}
 	
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		
-		velocity.set(Reg.cameraSpeed, 0);
-		framesEntreBala++;
-		animation.play("idle");
-		
-		movimiento();
-		disparo();
+
+		switch (state) 
+		{
+			case State.Alive:
+				velocity.set(Reg.cameraSpeed, 0);
+				framesEntreBala++;
+				animation.play("idle");
+				movimiento();
+				checkBoundaries();
+				disparo();
+			case State.Exploding:
+				velocity.set(0, 0);
+				if (animation.name == "explode" && animation.finished)
+				{
+					kill();
+				}
+			case State.Destroyed:
+		}
 	}
 	/*-----------------------Player-----------------------*/
-	private function disparo() 
+	private function disparo():Void
 	{
 		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 5)
 		{
@@ -89,12 +107,32 @@ class Player extends FlxSprite
 		}
 	}
 	
+	private function checkBoundaries():Void
+	{
+		if (x > camera.scroll.x + FlxG.width - width)
+			x = camera.scroll.x + FlxG.width - width;
+		if (x < camera.scroll.x)
+			x = camera.scroll.x;
+		if (y > FlxG.height - height || y < 0)
+		{
+			preKill();
+		}
+	}
+	
+	public function preKill():Void
+	{
+		if (state == State.Alive)
+		{
+			animation.play("explode");
+			state = State.Exploding;
+		}
+	}
+	
 	override public function kill():Void
 	{
-		animation.play("explode");
-		
 		super.kill();
 		
+		state = State.Destroyed;
 		if (vidas == 0)
 			Reg.gameOver = true;
 		else
@@ -102,6 +140,13 @@ class Player extends FlxSprite
 			vidas--;
 			reset(10, FlxG.height / 2);
 		}
+	}
+	
+	override public function reset(X, Y):Void
+	{
+		super.reset(X, Y);
+		
+		state = State.Alive;
 	}
 	
 	public function get_vidas():Int 
@@ -114,7 +159,7 @@ class Player extends FlxSprite
 		return bala;
 	}
 	/*-----------------------Power Up-----------------------*/
-	public function powerUpCollision()
+	public function powerUpCollision():Void
 	{
 		powerUpState++;
 	}
@@ -129,7 +174,7 @@ class Player extends FlxSprite
 		return powerUpState;
 	}
 	
-	public function resetPowerUpState()
+	public function resetPowerUpState():Void
 	{
 		powerUpState = 0;
 	}

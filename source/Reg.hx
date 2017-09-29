@@ -1,4 +1,5 @@
 package;
+import entities.Guide;
 
 class Reg 
 {	// Cosas de Camara

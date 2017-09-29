@@ -52,22 +52,24 @@ class PlayState extends FlxState
 		FlxG.camera.follow(guide);
 		
 		/*HUD*/
-		lives = new FlxText(0, 0, 256, "Lives: ", 8);
-		score = new FlxText(0, 0, 256, "Score: ", 8);
-		highestScore = new FlxText(0, 0, 256, "Best: ", 8);
-		paused = new FlxText(0, 0, 256, "Paused", 8);
-		gameOver = new FlxText(0, 0, 256, "Game Over", 8);
+		lives = new FlxText(0, 216, 256, "Lives: ", 8);
+		score = new FlxText(0, 216, 256, "Score: ", 8);
+		highestScore = new FlxText(0, 216, 256, "Best: ", 8);
+		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 8);
+		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 8);
 		
-		lives.setFormat(FlxColor.WHITE, FlxTextAlign.LEFT);
-		score.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
-		highestScore.setFormat(FlxColor.WHITE, FlxTextAlign.RIGHT);
-		paused.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
-		gameOver.setFormat(FlxColor.WHITE, FlxTextAlign.CENTER);
+		lives.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.LEFT);
+		score.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
+		highestScore.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.RIGHT);
+		paused.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
+		gameOver.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
 		
 		paused.visible = false;
 		gameOver.visible = false;
 		
-		lives.follow(camera);
+		lives.scrollFactor.x = 0;
+		score.scrollFactor.x = 0;
+		highestScore.scrollFactor.x = 0;
 		
 		/*ADD*/
 		add(guide);
@@ -97,12 +99,11 @@ class PlayState extends FlxState
 			/*Collision*/
 			colEnemyPared();
 			FlxG.overlap(pwUp, player, colPwUpPlayer);
-			checkBoundaries();
 		}
 		
-		lives.text += player.vidas;
-		score.text += Reg.score;
-		highestScore.text += Reg.highestScore;
+		lives.text = "Lives: " + player.vidas;
+		score.text = "Score: " + Reg.score;
+		highestScore.text = "Best: " + Reg.highestScore;
 		
 		if (FlxG.keys.justPressed.ENTER && !Reg.gameOver)
 		{
@@ -111,15 +112,6 @@ class PlayState extends FlxState
 		}
 	}
 	/*-----------------------Collision-----------------------*/
-	private function checkBoundaries():Void // Consider adding this checking to the Player class.
-	{
-		if (player.x > guide.x + FlxG.width / 2 - player.width)
-			player.x = guide.x + FlxG.width / 2 - player.width;
-		if (player.x < guide.x - FlxG.width / 2)
-			player.x = guide.x - FlxG.width / 2;
-		if (player.y > FlxG.height - player.height || player.y < 0)
-			player.kill(); 
-	}
 	
 	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
 	{
