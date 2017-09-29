@@ -1,4 +1,4 @@
-package;
+package states;
 
 import entities.Guide;
 import entities.Options;
@@ -13,6 +13,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
@@ -20,8 +21,13 @@ class PlayState extends FlxState
 	private var option:Options;
 	public var playerBalas:FlxTypedGroup<Bala>;
 	private var background:FlxSprite;	// Temporary background.
-	private var guide: FlxSprite;
+	private var guide:FlxSprite;
 	private var pwUp:FlxTypedGroup<PowerUp>;
+	private var lives:FlxText;
+	private var score:FlxText;
+	private var highestScore:FlxText;
+	private var paused:FlxText;
+	private var gameOver:FlxText;
 	
 	override public function create():Void
 	{
@@ -40,12 +46,21 @@ class PlayState extends FlxState
 		guide.makeGraphic(1, 1, 0x00000000);
 		guide.velocity.x = Reg.cameraSpeed;
 		FlxG.camera.follow(guide);
+		/*HUD*/
+		lives = new FlxText(0, 0, 256, 8);
+		score = new FlxText(0, 0, 256, 8);
+		highestScore = new FlxText(0, 0, 256, 8);
+		paused = new FlxText(0, 0, 256, 8);
+		gameOver = new FlxText(0, 0, 256, 8);
 		/*ADD*/
 		add(guide);
 		add(background);
 		add(playerBalas);
 		add(player);
 		add(pwUp);
+		add(lives);
+		add(score);
+		add(highestScore);
 	}
 
 	override public function update(elapsed:Float):Void

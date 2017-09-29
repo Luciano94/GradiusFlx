@@ -59,6 +59,7 @@ class Player extends FlxSprite
 		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 5)
 		{
 			var nuevaBala = new Bala(x + width, y + height / 2);
+			
 			balaArray.add(nuevaBala);
 			framesEntreBala = 0;
 		}
