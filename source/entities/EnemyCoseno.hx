@@ -7,8 +7,9 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 
 class EnemyCoseno extends FlxSprite 
-{ // Se llama 'coseno' porque el patrón que va a seguir va a ser el del 'coseno'
-  // https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Cosine.svg/350px-Cosine.svg.png
+{ 
+	private var hitPoints:Int;
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
@@ -18,6 +19,7 @@ class EnemyCoseno extends FlxSprite
 		width = 16;
 		height = 14;
 		offset.set(8, 1);
+		hitPoints = Reg.enemyCShp;
 		
 		velocity.y = Reg.enemyCSpeedY;
 		velocity.x = Reg.enemyCSpeedX;
@@ -29,5 +31,12 @@ class EnemyCoseno extends FlxSprite
 		super.update(elapsed);
 		
 		
+	}
+	
+	public function getDamage():Void
+	{
+		hitPoints--;
+		if (hitPoints == 0)
+			destroy();
 	}
 }

@@ -23,8 +23,7 @@ class Bala extends FlxSprite
 			animation.play("shot");
 		else
 			animation.play("laser");
-		
-		
+
 	}
 	
 	override public function update(elapsed:Float):Void
