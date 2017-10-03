@@ -5,16 +5,13 @@ import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxG;
 
-/**
- * ...
- * @author Aleman5
- */
 class EnemyPerseguidor extends FlxSprite 
 {
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
+		
 		loadGraphic(AssetPaths.enemyPerseguidor__png, true, 32, 16);
 		
 		width = 15;
@@ -29,10 +26,11 @@ class EnemyPerseguidor extends FlxSprite
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
 		movimiento();
 	}
 	
-	function movimiento():Void 
+	public function movimiento():Void 
 	{
 		
 		if (y >= Reg.playerRef.y + 2)
@@ -41,18 +39,19 @@ class EnemyPerseguidor extends FlxSprite
 			velocity.y = -Reg.enemySpeedY;
 			animation.play("arriba");
 		}
-		else if (y <= Reg.playerRef.y - 2)
-		{
-			velocity.x = -Reg.enemySpeedX;
-			velocity.y = Reg.enemySpeedY;
-			animation.play("abajo");
-		}
-		else
-		{
-			velocity.x = -Reg.enemySpeedX * 2.5;
-			velocity.y = 0;
-			animation.play("idle");
-		}
+		else 
+			if (y <= Reg.playerRef.y - 2)
+			{
+				velocity.x = -Reg.enemySpeedX;
+				velocity.y = Reg.enemySpeedY;
+				animation.play("abajo");
+			}
+			else
+			{
+				velocity.x = -Reg.enemySpeedX * 2.5;
+				velocity.y = 0;
+				animation.play("idle");
+			}
 	}
 	
 }

@@ -23,7 +23,7 @@ class Player extends FlxSprite
 	public var powerUpState:Int;
 	public var vidas(get, null):Int;
 	private var framesEntreBala:Int;
-	private var balaArray:FlxTypedGroup<Bala>;
+	public var balaArray(get, null):FlxTypedGroup<Bala>;
 	public var bala(get, null):Bala;
 	private var state:State;
 	
@@ -46,7 +46,7 @@ class Player extends FlxSprite
 		misilArray = playermisilArray;
 		framesEntreMisil = Reg.playerFramesEntreBala;
 		powerUpState = 0;
-		faster = speed * 2;
+		faster = Reg.playerPowerUpSpeed;
 		laser = false;
 		misil = false;
 		/*Animations*/
@@ -84,7 +84,7 @@ class Player extends FlxSprite
 	/*-----------------------Player-----------------------*/
 	private function disparo():Void
 	{
-		if (FlxG.keys.justPressed.SPACE && framesEntreBala >=10)
+		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 10)
 		{
 			var nuevaBala = new Bala(x + width, y + height / 2, laser);
 			if (misil && framesEntreMisil >= 50)
@@ -128,7 +128,7 @@ class Player extends FlxSprite
 			x = camera.scroll.x + FlxG.width - width;
 		if (x < camera.scroll.x)
 			x = camera.scroll.x;
-		if (y > FlxG.height - height || y < 0)
+		if (y > FlxG.height - 24 - height || y < 0)
 		{
 			preKill();
 		}
@@ -149,7 +149,11 @@ class Player extends FlxSprite
 		
 		state = State.Destroyed;
 		if (vidas == 0)
+		{	
 			Reg.gameOver = true;
+			if (Reg.score > Reg.highestScore)
+				Reg.highestScore = Reg.score;
+		}
 		else
 		{
 			vidas--;
@@ -173,6 +177,12 @@ class Player extends FlxSprite
 	{
 		return bala;
 	}
+	
+	public function get_balaArray():FlxTypedGroup<Bala> 
+	{
+		return balaArray;
+	}
+	
 	/*-----------------------Power Up-----------------------*/
 	/*Collision*/
 	public function powerUpCollision()

@@ -16,13 +16,13 @@ class Bala extends FlxSprite
 		speed = Reg.playerBalaSpeed;
 		velocity.x = speed;
 		laser = _laser;
-		loadGraphic(AssetPaths.balaPlayer__png, true, 8, 4);
-		animation.add("s0", [0]); // Estado normal de la bala
-		animation.add("s1", [1]); // Estado cuando el PowerUp "Laser" esta activado
+		loadGraphic(AssetPaths.balaPlayer__png, true, 8, 6);
+		animation.add("shot", [0]); // Estado normal de la bala
+		animation.add("laser", [1]); // Estado cuando el PowerUp "Laser" esta activado
 		if(!laser)				  // Esto es para cuando tengamos el PowerUp Laser
-			animation.play("s0");
+			animation.play("shot");
 		else
-			animation.play("s1");
+			animation.play("laser");
 		
 		
 	}
@@ -34,10 +34,9 @@ class Bala extends FlxSprite
 		checkBoundaries();
 	}
 	
-	function checkBoundaries():Void 
+	private function checkBoundaries():Void 
 	{
-		if (x > camera.scroll.x + FlxG.width || y < 0) // Puse 'y<0' para cuando el PUp 'doble' esté activado
-			kill();
+		if (x > camera.scroll.x + FlxG.width || y < 0) // Puse 'y<0' para cuando el PUp 'doble' esté activado	
+			destroy();
 	}
-	
 }

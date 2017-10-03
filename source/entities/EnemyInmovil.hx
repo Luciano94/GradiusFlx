@@ -4,10 +4,6 @@ import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.math.FlxRandom;
 
-/**
- * ...
- * @author Aleman5
- */
 class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 {
 	private var rTime:FlxRandom;
@@ -21,13 +17,16 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		super(X, Y, SimpleGraphic);
 		
 		loadGraphic(AssetPaths.enemyInmovil__png, true, 32, 16);
+		
 		width = 14;
 		height = 14;
 		offset.set(9, 1);
+		
 		animation.add("medio", [0]);
 		animation.add("derecha", [1]);
 		animation.add("izq", [2]);
 		animation.play("medio");
+		
 		rTime = new FlxRandom();
 		rNum = rTime.int(2, 4);
 		posX = 0;
@@ -36,12 +35,13 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
 		actualAni();
 		disparo();
 
 	}
 	
-	function actualAni() 
+	private function actualAni():Void
 	{
 		if (x > Reg.playerRef.x + 15)
 		{
@@ -63,14 +63,14 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		}
 	}
 	
-	function disparo():Void 
+	private function disparo():Void 
 	{
-		if (Reg.timer > 3+rNum) 
+		if (Reg.timer > 3 + rNum) 
 			balaEne = new BalaEne(this.x + posX, this.y + posY); // Se va a modificar X|Y de acuerdo al tamaño del enemy
 		
 	}
 	
-	function get_balaEne():BalaEne 
+	public function get_balaEne():BalaEne 
 	{
 		return balaEne;
 	}

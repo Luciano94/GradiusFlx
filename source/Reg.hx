@@ -12,7 +12,8 @@ class Reg
 	static public var paused:Bool = false;
 	// Cosas de Player
 	static public var playerNormalSpeed:Int = 100;
-	static inline public var playerMaxLives = 3;
+	static public var playerPowerUpSpeed:Int = 150;
+	static inline public var playerMaxLives:Int = 3;
 	static public var playerBalaSpeed:Int = 250;
 	static public var playerFramesEntreBala:Int = 0;
 	static public var playerRef:Player;
@@ -20,9 +21,10 @@ class Reg
 	static public var enemyBalaSpeed:Int = 60;
 	static public var timer:Float = 0;
 	// Cosas de EnemyPerseguidor
-	static public var enemySpeedX = 25; 
-	static public var enemySpeedY = 40;
+	static public var enemySpeedX:Int = 25; 
+	static public var enemySpeedY:Int = 40;
 	// Cosas de EnemyCoseno
-	static public var enemyCSpeedX = 30;
-	static public var enemyCSpeedY = -120;
+	static public var enemyCSpeedX:Int = 30;
+	static public var enemyCSpeedY:Int = -120;
+	static public var enemyCShp:Int = 2;
 }

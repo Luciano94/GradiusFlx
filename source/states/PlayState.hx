@@ -78,17 +78,18 @@ class PlayState extends FlxState
 		lives = new FlxText(0, 216, 256, "Lives: ", 8);
 		score = new FlxText(0, 216, 256, "Score: ", 8);
 		highestScore = new FlxText(0, 216, 256, "Best: ", 8);
-		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 8);
-		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 8);
+		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 12);
+		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 12);
 		
 		lives.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.LEFT);
 		score.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
 		highestScore.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.RIGHT);
-		paused.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
-		gameOver.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
+		paused.setFormat(null, 12, FlxColor.WHITE, FlxTextAlign.CENTER);
+		gameOver.setFormat(null, 12, FlxColor.WHITE, FlxTextAlign.CENTER);
 		
 		paused.visible = false;
 		gameOver.visible = false;
+		highestScore.visible = false;
 		
 		lives.scrollFactor.x = 0;
 		score.scrollFactor.x = 0;
@@ -122,21 +123,21 @@ class PlayState extends FlxState
 		{
 			super.update(elapsed);
 			
-			/*Player*/
-			playerTriggered();
-			
 			/*Power UP*/
 			sistemaPowerUp();
 			
-			/*Collision*/
-			colEnemyPared();
+			/*Collisions*/
 			FlxG.overlap(pwUp, player, colPwUpPlayer);
+			FlxG.overlap(player.balaArray, enemyInmovil, damageEnemyInmovil);
+			FlxG.overlap(player.balaArray, enemyCoseno, damageEnemyCoseno);
+			FlxG.overlap(player.balaArray, enemyPerseguidor, damageEnemyPerseguidor);
 			if (FlxG.overlap(enemyInmovil, player))
-				player.kill();
+				player.preKill();
 			if (FlxG.overlap(enemyPerseguidor, player))
-				player.kill();
+				player.preKill();
 			if (FlxG.overlap(enemyCoseno, player))
-				player.kill();
+				player.preKill();
+			
 			
 		}
 		
@@ -144,12 +145,21 @@ class PlayState extends FlxState
 		score.text = "Score: " + Reg.score;
 		highestScore.text = "Best: " + Reg.highestScore;
 		
+		if (Reg.highestScore > 0)
+			highestScore.visible = true;
+		
 		if (FlxG.keys.justPressed.ENTER && !Reg.gameOver)
 		{
 			Reg.paused = !Reg.paused;
 			paused.visible = !paused.visible;
 		}
+		
+		if (Reg.gameOver)
+		{
+			gameOver.visible = true;
+		}
 	}
+
 	/*-----------------------Collision-----------------------*/
 	
 	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
@@ -158,15 +168,30 @@ class PlayState extends FlxState
 		power.kill();
 	}
 	
-	public function colEnemyPared():Void
+	private function damageEnemyInmovil(shot:Bala, enemy:EnemyInmovil):Void
 	{
-		
+		Reg.score += 10;
+		shot.destroy();
+		enemy.destroy();
 	}
-	/*-----------------------Player-----------------------*/
-	public function playerTriggered():Void
+	
+	private function damageEnemyCoseno(shot:Bala, enemy:EnemyCoseno):Void
 	{
-		
+		Reg.score += 20;
+		shot.destroy();
+		enemy.getDamage();
 	}
+	
+	private function damageEnemyPerseguidor(shot:Bala, enemy:EnemyPerseguidor):Void 
+	{
+		Reg.score += 30;
+		shot.destroy();
+		if (player.isLaser)
+			enemy.destroy();
+		else
+			enemy.getDamage();
+	}
+	
 	/*-----------------------Power UP-----------------------*/
 	private function sistemaPowerUp()
 	{

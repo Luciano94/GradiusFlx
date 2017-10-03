@@ -1,10 +1,5 @@
 package entities;
 
-/**
- * ...
- * @author holis
- */
-
 class Misil extends Bala 
 {
 
