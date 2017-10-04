@@ -32,9 +32,9 @@ class PlayState extends FlxState
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
-	//public var eP:EnemyPerseguidor;
-	//public var eI:EnemyInmovil;
-	//public var eC:EnemyCoseno;
+	public var eP:EnemyPerseguidor;
+	public var eI:EnemyInmovil;
+	public var eC:EnemyCoseno;
 	private var lives:FlxText;
 	private var score:FlxText;
 	private var highestScore:FlxText;
@@ -46,6 +46,7 @@ class PlayState extends FlxState
 		super.create();
 		
 		var loader:FlxOgmoLoader = new FlxOgmoLoader(AssetPaths.Level__oel);
+		FlxG.worldBounds.set(0, 0, 7680, 240);
 		
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
@@ -70,9 +71,9 @@ class PlayState extends FlxState
 		FlxG.camera.follow(guide);
 		
 		/*ENEMY*/
-		//eP = new EnemyPerseguidor(200, 200);
-		//eI = new EnemyInmovil(100, 200);
-		//eC = new EnemyCoseno(220, 150);
+		//eP = new EnemyPerseguidor(200, 200, false, pwUp);
+		//eI = new EnemyInmovil(350, 180, false, pwUp);
+		//eC = new EnemyCoseno(220, 150, false, pwUp);
 		enemyPerseguidor = new FlxTypedGroup<EnemyPerseguidor>();
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
@@ -134,13 +135,13 @@ class PlayState extends FlxState
 				player = new Player(x, y, playerBalas, playerMisiles);
 				add(player);
 			case "CosineEnemies":
-				var cosineEnemy = new EnemyCoseno(x, y);
+				var cosineEnemy = new EnemyCoseno(x, y, false, pwUp);
 				enemyCoseno.add(cosineEnemy);
 			case "StaticEnemies":
-				var staticEnemy = new EnemyInmovil(x, y);
+				var staticEnemy = new EnemyInmovil(x, y, false, pwUp);
 				enemyInmovil.add(staticEnemy);
 			case "ChasingEnemies":
-				var chasingEnemy = new EnemyPerseguidor(x, y);
+				var chasingEnemy = new EnemyPerseguidor(x, y, false, pwUp);
 				enemyPerseguidor.add(chasingEnemy);	
 		}
 	}
