@@ -33,9 +33,6 @@ class PlayState extends FlxState
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
-	public var eP:EnemyPerseguidor;
-	public var eI:EnemyInmovil;
-	public var eC:EnemyCoseno;
 	private var lives:FlxText;
 	private var score:FlxText;
 	private var highestScore:FlxText;
@@ -55,8 +52,6 @@ class PlayState extends FlxState
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		playerMisiles = new FlxTypedGroup<Misil>();
-		//player = new Player(10, FlxG.height / 2, playerBalas, playerMisiles);
-		//Reg.playerRef = player;
 		
 		/*Background*/
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
@@ -75,9 +70,6 @@ class PlayState extends FlxState
 		FlxG.camera.follow(guide);
 		
 		/*ENEMY*/
-		//eP = new EnemyPerseguidor(200, 200, false, pwUp);
-		//eI = new EnemyInmovil(350, 180, false, pwUp);
-		//eC = new EnemyCoseno(220, 150, false, pwUp);
 		enemyPerseguidor = new FlxTypedGroup<EnemyPerseguidor>();
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
@@ -112,11 +104,7 @@ class PlayState extends FlxState
 		add(guide);
 		add(playerBalas);
 		add(playerMisiles);
-		//add(player);
 		add(pwUp);
-		//enemyPerseguidor.add(eP);
-		//enemyInmovil.add(eI);
-		//enemyCoseno.add(eC);
 		add(enemyPerseguidor);
 		add(enemyInmovil);
 		add(enemyCoseno);
