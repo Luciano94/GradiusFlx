@@ -23,7 +23,7 @@ class EnemyCoseno extends FlxSprite
 		
 		velocity.y = Reg.enemyCSpeedY;
 		velocity.x = Reg.enemyCSpeedX;
-		//FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	This is messing with the collision.
+		FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the collision.
 	}
 	
 	override public function update(elapsed:Float):Void 

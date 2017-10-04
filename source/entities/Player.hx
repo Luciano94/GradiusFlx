@@ -14,25 +14,28 @@ enum State
 }
 class Player extends FlxSprite 
 {
+	/*Player*/
 	private var speed:Int;
+	public var vidas(get, null):Int;
+	private var framesEntreBala:Int;
+	private var balaArray:FlxTypedGroup<Bala>;
+	public var bala(get, null):Bala;
+	private var state:State;
+	/*Power Ups*/
 	private var faster:Int;
+	private var shield: Bool;
 	private var laser: Bool;
 	private var misil: Bool;
 	private var misilArray:FlxTypedGroup<Misil>;
 	private var framesEntreMisil:Int;
 	public var powerUpState:Int;
-	public var vidas(get, null):Int;
-	private var framesEntreBala:Int;
-	public var balaArray(get, null):FlxTypedGroup<Bala>;
-	public var bala(get, null):Bala;
-	private var state:State;
 	
 	public function new(?X:Float=0, ?Y:Float=0, playerBalaArray:FlxTypedGroup<Bala>, playermisilArray:FlxTypedGroup<Misil>) 
 	{
 		super(X, Y);
 		
 		/*Graphic*/
-		loadGraphic(AssetPaths.spaceship__png, true, 32, 24);
+		loadGraphic(AssetPaths.spaceship1__png, true, 32, 24);
 		/*Speed*/
 		speed = Reg.playerNormalSpeed;
 		/*State*/
@@ -46,7 +49,8 @@ class Player extends FlxSprite
 		misilArray = playermisilArray;
 		framesEntreMisil = Reg.playerFramesEntreBala;
 		powerUpState = 0;
-		faster = Reg.playerPowerUpSpeed;
+		faster = speed * 2;
+		shield = false;
 		laser = false;
 		misil = false;
 		/*Animations*/
@@ -56,6 +60,12 @@ class Player extends FlxSprite
 		animation.add("moveBackwards", [4]);
 		animation.add("moveForward", [3]);
 		animation.add("explode", [7, 8, 9], 6, false);
+		/*Shield*/
+		animation.add("idleS", [10, 11, 12], 6, true);
+		animation.add("moveUpS", [15]);
+		animation.add("moveDownS", [16]);
+		animation.add("moveBackwardsS", [14]);
+		animation.add("moveForwardS", [13]);
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -68,7 +78,10 @@ class Player extends FlxSprite
 				velocity.set(Reg.cameraSpeed, 0);
 				framesEntreBala++;
 				framesEntreMisil++;
-				animation.play("idle");
+				if (shield)
+					animation.play("idleS");
+				else
+					animation.play("idle");
 				movimiento();
 				checkBoundaries();
 				disparo();
@@ -103,22 +116,35 @@ class Player extends FlxSprite
 		if (FlxG.keys.pressed.UP)
 		{
 			velocity.y -= speed;
-			animation.play("moveUp");
+			if(shield)
+				animation.play("moveUpS");
+			else
+				animation.play("moveUp");
 		}
 		if (FlxG.keys.pressed.DOWN)
 		{
 			velocity.y += speed;
-			animation.play("moveDown");
+			if (shield)
+				animation.play("moveDownS");
+			else
+				animation.play("moveDown");
 		}
 		if (FlxG.keys.pressed.LEFT)
 		{
 			velocity.x -= speed;
-			animation.play("moveBackwards");
+			if (shield)
+				animation.play("moveBackwardsS");
+			else
+				animation.play("moveBackwards");
+				
 		}
 		if (FlxG.keys.pressed.RIGHT)
 		{
 			velocity.x += speed;
-			animation.play("moveForward");
+			if (shield)
+				animation.play("moveForwardS");
+			else
+				animation.play("moveForward");		
 		}
 	}
 	
@@ -202,7 +228,21 @@ class Player extends FlxSprite
 			return true;
 		return false;
 	}
+	/*Shield*/
+	public function actShield():Void
+	{
+		shield = true;
+	}
 	
+	public function isShielded():Bool
+	{
+		return shield;
+	}
+	
+	public function descShield():Void
+	{
+		shield = false;
+	}
 	/*Laser*/
 	public function actlaser():Void
 	{

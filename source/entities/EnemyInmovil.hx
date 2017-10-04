@@ -38,7 +38,6 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		
 		actualAni();
 		disparo();
-
 	}
 	
 	private function actualAni():Void

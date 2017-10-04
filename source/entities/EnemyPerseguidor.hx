@@ -53,5 +53,8 @@ class EnemyPerseguidor extends FlxSprite
 				animation.play("idle");
 			}
 	}
-	
+	public function getDamage():Void
+	{
+		
+	}
 }

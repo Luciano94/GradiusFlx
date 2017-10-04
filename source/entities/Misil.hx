@@ -1,5 +1,7 @@
 package entities;
 
+import flixel.FlxG;
+
 class Misil extends Bala 
 {
 
@@ -14,6 +16,12 @@ class Misil extends Bala
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
+	}
+	
+	override function checkBoundaries():Void 
+	{
+		if (y > camera.scroll.y + FlxG.height)
+			destroy();
 	}
 	
 }

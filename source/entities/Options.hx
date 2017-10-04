@@ -20,7 +20,8 @@ class Options extends Player
 		animation.add("idle", [0, 1, 2, 4, 5], 10, true);
 		animation.play("idle");
 		player = _player;
-		faster = Reg.playerPowerUpSpeed;
+		faster = speed * 2;
+		shield = false;
 	}
 	
 	override public function update(elapsed:Float):Void 

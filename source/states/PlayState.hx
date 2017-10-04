@@ -1,5 +1,6 @@
 package states;
 
+import entities.Boss;
 import entities.Guide;
 import entities.Misil;
 import entities.Options;
@@ -10,6 +11,7 @@ import entities.BalaEne;
 import entities.EnemyInmovil;
 import entities.EnemyPerseguidor;
 import entities.EnemyCoseno;
+import entities.PwUpBar;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxG;
@@ -19,30 +21,38 @@ import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
+	/*player*/
 	private var player:Player;
+	public var playerBalas:FlxTypedGroup<Bala>;
+	/*powerUps*/
 	private var opt1:Options;
 	private var opt2:Options;
-	private var powerUpState:Int;
-	public var playerBalas:FlxTypedGroup<Bala>;
-	public var playerMisiles:FlxTypedGroup<Misil>;
-	private var background:FlxSprite;	// Temporary background.
-	private var guide:FlxSprite;
 	private var pwUp:FlxTypedGroup<PowerUp>;
+	private var powerUpState:Int;
+	public var playerMisiles:FlxTypedGroup<Misil>;
+	public var pwUpBar:PwUpBar;
+	/*Lvl*/
+	private var background:FlxSprite;	// Temporary background.
+	private var lives:FlxText;
+	private var score:FlxText;
+	private var highestScore:FlxText;
+	private var paused:FlxText;
+	private var gameOver:FlxText;
+	/*Camera*/
+	private var guide:FlxSprite;
+	/*Enemys*/
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
 	public var eP:EnemyPerseguidor;
 	public var eI:EnemyInmovil;
 	public var eC:EnemyCoseno;
-	private var lives:FlxText;
-	private var score:FlxText;
-	private var highestScore:FlxText;
-	private var paused:FlxText;
-	private var gameOver:FlxText;
+	public var bosito:Boss;
 	
 	override public function create():Void
 	{
 		super.create();
+		FlxG.worldBounds.set(0,0,7560,240);
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		playerMisiles = new FlxTypedGroup<Misil>();
@@ -53,6 +63,7 @@ class PlayState extends FlxState
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
 		
 		/*Power UP*/
+		pwUpBar = new PwUpBar(1,180);
 		pwUp = new FlxTypedGroup<PowerUp>();
 		pwUp.add(new PowerUp(100, 100));
 		pwUp.add(new PowerUp(200, 100));
@@ -66,6 +77,7 @@ class PlayState extends FlxState
 		FlxG.camera.follow(guide);
 		
 		/*ENEMY*/
+		bosito = new Boss(FlxG.width - 32, (FlxG.height /2) + 32);
 		eP = new EnemyPerseguidor(200, 200);
 		eI = new EnemyInmovil(100, 200);
 		eC = new EnemyCoseno(220, 150);
@@ -104,12 +116,14 @@ class PlayState extends FlxState
 		add(playerMisiles);
 		add(player);
 		add(pwUp);
+		add(pwUpBar);
 		enemyPerseguidor.add(eP);
 		enemyInmovil.add(eI);
 		enemyCoseno.add(eC);
 		add(enemyPerseguidor);
 		add(enemyInmovil);
 		add(enemyCoseno);
+		add(bosito);
 		add(lives);
 		add(score);
 		add(highestScore);
@@ -128,9 +142,9 @@ class PlayState extends FlxState
 			
 			/*Collisions*/
 			FlxG.overlap(pwUp, player, colPwUpPlayer);
-			FlxG.overlap(player.balaArray, enemyInmovil, damageEnemyInmovil);
-			FlxG.overlap(player.balaArray, enemyCoseno, damageEnemyCoseno);
-			FlxG.overlap(player.balaArray, enemyPerseguidor, damageEnemyPerseguidor);
+			FlxG.overlap(player.get_balaArray(), enemyInmovil, damageEnemyInmovil);
+			FlxG.overlap(player.get_balaArray(), enemyCoseno, damageEnemyCoseno);
+			FlxG.overlap(player.get_balaArray(), enemyPerseguidor, damageEnemyPerseguidor);
 			if (FlxG.overlap(enemyInmovil, player))
 				player.preKill();
 			if (FlxG.overlap(enemyPerseguidor, player))
@@ -140,7 +154,6 @@ class PlayState extends FlxState
 			
 			
 		}
-		
 		lives.text = "Lives: " + player.vidas;
 		score.text = "Score: " + Reg.score;
 		highestScore.text = "Best: " + Reg.highestScore;
@@ -161,7 +174,7 @@ class PlayState extends FlxState
 	}
 
 	/*-----------------------Collision-----------------------*/
-	
+	/*PwUp*/
 	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
 	{
 		player.powerUpCollision();
@@ -186,7 +199,7 @@ class PlayState extends FlxState
 	{
 		Reg.score += 30;
 		shot.destroy();
-		if (player.isLaser)
+		if (player.isLaser())
 			enemy.destroy();
 		else
 			enemy.getDamage();
@@ -195,6 +208,21 @@ class PlayState extends FlxState
 	/*-----------------------Power UP-----------------------*/
 	private function sistemaPowerUp()
 	{
+			switch (player.getPowerUpState()) 
+			{
+				case 1:
+					pwUpBar.animation.play("speed");
+				case 2:
+					pwUpBar.animation.play("laser");
+				case 3:
+					pwUpBar.animation.play("misil");
+				case 4:
+					pwUpBar.animation.play("option");
+				case 5:
+					pwUpBar.animation.play("shield");
+				default:
+					pwUpBar.animation.play("idle");
+			}
 		if (FlxG.keys.justPressed.C)
 		{
 			switch (player.getPowerUpState()) 
@@ -220,6 +248,9 @@ class PlayState extends FlxState
 						opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
 						add(opt1);
 					}
+				case 5:
+					player.resetPowerUpState();
+					player.actShield();
 				default:
 			}
 		}
