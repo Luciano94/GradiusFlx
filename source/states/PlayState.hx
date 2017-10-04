@@ -16,6 +16,7 @@ import flixel.FlxG;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
+import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
 
 class PlayState extends FlxState
@@ -40,19 +41,22 @@ class PlayState extends FlxState
 	private var highestScore:FlxText;
 	private var paused:FlxText;
 	private var gameOver:FlxText;
+	private var loader:FlxOgmoLoader;
+	private var tilemap:FlxTilemap;
 	
 	override public function create():Void
 	{
 		super.create();
 		
-		var loader:FlxOgmoLoader = new FlxOgmoLoader(AssetPaths.Level__oel);
 		FlxG.worldBounds.set(0, 0, 7680, 240);
+		loader = new FlxOgmoLoader(AssetPaths.Level__oel);
+		tilemap = loader.loadTilemap(AssetPaths.tiles__png, 32, 24, "Tiles");
 		
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		playerMisiles = new FlxTypedGroup<Misil>();
 		//player = new Player(10, FlxG.height / 2, playerBalas, playerMisiles);
-		Reg.playerRef = player;
+		//Reg.playerRef = player;
 		
 		/*Background*/
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
@@ -103,10 +107,9 @@ class PlayState extends FlxState
 		gameOver.scrollFactor.x = 0;
 		
 		/*ADD*/
-		loader.loadEntities(entityCreator, "Entities");
-		
-		add(guide);
 		add(background);
+		loader.loadEntities(entityCreator, "Entities");
+		add(guide);
 		add(playerBalas);
 		add(playerMisiles);
 		//add(player);
@@ -133,6 +136,7 @@ class PlayState extends FlxState
 		{
 			case "Player":
 				player = new Player(x, y, playerBalas, playerMisiles);
+				Reg.playerRef = player;
 				add(player);
 			case "CosineEnemies":
 				var cosineEnemy = new EnemyCoseno(x, y, false, pwUp);
