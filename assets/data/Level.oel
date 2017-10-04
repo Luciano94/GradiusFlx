@@ -1,0 +1,12 @@
+<level width="7680" height="240" Number="1">
+  <Entities>
+    <Player id="0" x="0" y="96" />
+    <CosineEnemies id="1" x="352" y="24" />
+    <CosineEnemies id="2" x="448" y="168" />
+    <CosineEnemies id="3" x="384" y="48" />
+    <StaticEnemies id="4" x="96" y="216" />
+    <StaticEnemies id="5" x="320" y="216" />
+    <StaticEnemies id="6" x="608" y="216" />
+    <ChasingEnemies id="7" x="704" y="96" />
+  </Entities>
+</level>

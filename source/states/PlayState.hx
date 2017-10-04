@@ -13,6 +13,7 @@ import entities.EnemyCoseno;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxG;
+import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -31,9 +32,9 @@ class PlayState extends FlxState
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
-	public var eP:EnemyPerseguidor;
-	public var eI:EnemyInmovil;
-	public var eC:EnemyCoseno;
+	//public var eP:EnemyPerseguidor;
+	//public var eI:EnemyInmovil;
+	//public var eC:EnemyCoseno;
 	private var lives:FlxText;
 	private var score:FlxText;
 	private var highestScore:FlxText;
@@ -43,10 +44,13 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		
+		var loader:FlxOgmoLoader = new FlxOgmoLoader(AssetPaths.Level__oel);
+		
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		playerMisiles = new FlxTypedGroup<Misil>();
-		player = new Player(10, FlxG.height / 2, playerBalas, playerMisiles);
+		//player = new Player(10, FlxG.height / 2, playerBalas, playerMisiles);
 		Reg.playerRef = player;
 		
 		/*Background*/
@@ -66,9 +70,9 @@ class PlayState extends FlxState
 		FlxG.camera.follow(guide);
 		
 		/*ENEMY*/
-		eP = new EnemyPerseguidor(200, 200);
-		eI = new EnemyInmovil(100, 200);
-		eC = new EnemyCoseno(220, 150);
+		//eP = new EnemyPerseguidor(200, 200);
+		//eI = new EnemyInmovil(100, 200);
+		//eC = new EnemyCoseno(220, 150);
 		enemyPerseguidor = new FlxTypedGroup<EnemyPerseguidor>();
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
@@ -98,15 +102,17 @@ class PlayState extends FlxState
 		gameOver.scrollFactor.x = 0;
 		
 		/*ADD*/
+		loader.loadEntities(entityCreator, "Entities");
+		
 		add(guide);
 		add(background);
 		add(playerBalas);
 		add(playerMisiles);
-		add(player);
+		//add(player);
 		add(pwUp);
-		enemyPerseguidor.add(eP);
-		enemyInmovil.add(eI);
-		enemyCoseno.add(eC);
+		//enemyPerseguidor.add(eP);
+		//enemyInmovil.add(eI);
+		//enemyCoseno.add(eC);
 		add(enemyPerseguidor);
 		add(enemyInmovil);
 		add(enemyCoseno);
@@ -115,6 +121,28 @@ class PlayState extends FlxState
 		add(highestScore);
 		add(paused);
 		add(gameOver);
+	}
+	
+	private function entityCreator(entityName:String, entityData:Xml):Void
+	{
+		var x:Int = Std.parseInt(entityData.get("x"));
+		var y:Int = Std.parseInt(entityData.get("y"));
+		
+		switch (entityName) 
+		{
+			case "Player":
+				player = new Player(x, y, playerBalas, playerMisiles);
+				add(player);
+			case "CosineEnemies":
+				var cosineEnemy = new EnemyCoseno(x, y);
+				enemyCoseno.add(cosineEnemy);
+			case "StaticEnemies":
+				var staticEnemy = new EnemyInmovil(x, y);
+				enemyInmovil.add(staticEnemy);
+			case "ChasingEnemies":
+				var chasingEnemy = new EnemyPerseguidor(x, y);
+				enemyPerseguidor.add(chasingEnemy);	
+		}
 	}
 
 	override public function update(elapsed:Float):Void
@@ -179,17 +207,16 @@ class PlayState extends FlxState
 	{
 		Reg.score += 20;
 		shot.destroy();
-		enemy.getDamage();
-	}
-	
+		if (player.isLaser())
+			enemy.destroy();
+		else
+	    	enemy.getDamage();		
+	}   
 	private function damageEnemyPerseguidor(shot:Bala, enemy:EnemyPerseguidor):Void 
 	{
 		Reg.score += 30;
 		shot.destroy();
-		if (player.isLaser)
-			enemy.destroy();
-		else
-			enemy.getDamage();
+		enemy.destroy();
 	}
 	
 	/*-----------------------Power UP-----------------------*/
