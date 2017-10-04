@@ -12,7 +12,7 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	private var posX:Int;
 	private var posY:Int;
 	private var normalizado:Bool;
-	public var balaEne(get, null):BalaEne;
+	public var balaEne:FlxTypedGroup<BalaEne>;
 	public var pwUp:FlxTypedGroup<PowerUp>;
 
 	public function new(?X:Float=0, ?Y:Float=0, ?Normalizado:Bool=true, PwUp:FlxTypedGroup<PowerUp>)
@@ -86,8 +86,8 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	private function disparo():Void 
 	{
 		if (Reg.timer > 1 + rNum){ 
-			balaEne = new BalaEne(this.x + posX, this.y + posY);
-			
+			var newBalaEne = new BalaEne(this.x + posX, this.y + posY);
+			balaEne.add(newBalaEne);
 		}
 		
 	}
@@ -100,10 +100,5 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		var nuevoPowerUp = new PowerUp(x, y);
 		pwUp.add(nuevoPowerUp);
 		}
-	}
-	
-	public function get_balaEne():BalaEne 
-	{
-		return balaEne;
 	}
 }

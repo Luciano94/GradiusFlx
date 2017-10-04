@@ -20,6 +20,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
+import flixel.ui.FlxBar;
 
 class PlayState extends FlxState
 {
@@ -44,10 +45,12 @@ class PlayState extends FlxState
 	private var guide:FlxSprite;
 	/*Enemys*/
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
-	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
+	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
+	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
 	private var tilemap:FlxTilemap;
 	private var loader:FlxOgmoLoader;
+	private var bositoBar:FlxBar;
 	
 	override public function create():Void
 	{
@@ -80,9 +83,9 @@ class PlayState extends FlxState
 		
 		/*ENEMY*/
 		enemyPerseguidor = new FlxTypedGroup<EnemyPerseguidor>();
-		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
-
+		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
+		enemyInmovilBalas = new FlxTypedGroup<BalaEne>();
 		
 		/*HUD*/
 		lives = new FlxText(0, 216, 256, "Lives: ", 8);
@@ -110,6 +113,11 @@ class PlayState extends FlxState
 		/*ADD*/
 		add(background);
 		loader.loadEntities(entityCreator, "Entities");
+		
+		/*BOSS*/
+		bositoBar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 30, 5, player, "vidas", 0, 3, true);
+		
+		/*ADD*/
 		add(guide);
 		add(playerBalas);
 		add(playerMisiles);
@@ -118,12 +126,15 @@ class PlayState extends FlxState
 		add(enemyPerseguidor);
 		add(enemyInmovil);
 		add(enemyCoseno);
-		add(bosito);
+		//add(bosito);
+		add(bositoBar);
 		add(lives);
 		add(score);
 		add(highestScore);
 		add(paused);
 		add(gameOver);
+		
+		
 	}
 	
 	private function entityCreator(entityName:String, entityData:Xml):Void
@@ -157,6 +168,9 @@ class PlayState extends FlxState
 			
 			/*Power UP*/
 			sistemaPowerUp();
+			
+			bositoBar.x = player.x + 16;
+			bositoBar.y = player.y + 5;
 			
 			/*Collisions*/
 			FlxG.overlap(pwUp, player, colPwUpPlayer);

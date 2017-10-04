@@ -97,7 +97,7 @@ class Player extends FlxSprite
 	/*-----------------------Player-----------------------*/
 	private function disparo():Void
 	{
-		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 10)
+		if (FlxG.keys.justPressed.X && framesEntreBala >= 10)
 		{
 			var nuevaBala = new Bala(x + width, y + height / 2, laser);
 			if (misil && framesEntreMisil >= 50)
