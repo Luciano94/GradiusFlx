@@ -218,7 +218,10 @@ class Player extends FlxSprite
 	/*Collision*/
 	public function powerUpCollision()
 	{
-		powerUpState++;
+		if (poweUpState < Reg.numberOfPowerUps)
+			powerUpState++;
+		else
+			powerUpState = 1;
 	}
 	
 	/*Speed*/
