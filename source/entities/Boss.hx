@@ -4,10 +4,6 @@ import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
-/**
- * ...
- * @author holis
- */
 class Boss extends FlxSprite 
 {
 

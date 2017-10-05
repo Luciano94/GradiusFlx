@@ -24,10 +24,10 @@ import flixel.ui.FlxBar;
 
 class PlayState extends FlxState
 {
-	/*player*/
+	/*Player*/
 	private var player:Player;
 	public var playerBalas:FlxTypedGroup<Bala>;
-	/*powerUps*/
+	/*PowerUps*/
 	private var opt1:Options;
 	private var opt2:Options;
 	private var pwUp:FlxTypedGroup<PowerUp>;
@@ -35,7 +35,6 @@ class PlayState extends FlxState
 	public var playerMisiles:FlxTypedGroup<Misil>;
 	public var pwUpBar:PwUpBar;
 	/*Lvl*/
-	private var background:FlxSprite;	// Temporary background.
 	private var lives:FlxText;
 	private var score:FlxText;
 	private var highestScore:FlxText;
@@ -43,7 +42,7 @@ class PlayState extends FlxState
 	private var gameOver:FlxText;
 	/*Camera*/
 	private var guide:FlxSprite;
-	/*Enemys*/
+	/*Enemies*/
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
@@ -58,14 +57,14 @@ class PlayState extends FlxState
 		
 		FlxG.worldBounds.set(0, 0, 7680, 240);
 		loader = new FlxOgmoLoader(AssetPaths.Level__oel);
-		tilemap = loader.loadTilemap(AssetPaths.tiles__png, 32, 24, "Tiles");
+		tilemap = loader.loadTilemap(AssetPaths.tiles__png, 16, 16, "Tiles");
 		
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
 		playerMisiles = new FlxTypedGroup<Misil>();
 		
 		/*Background*/
-		background = new FlxSprite(0, 0, AssetPaths.background__png);
+		//background = new FlxSprite(0, 0, AssetPaths.background__png);
 		
 		/*Power UP*/
 		pwUpBar = new PwUpBar(1,180);
@@ -88,9 +87,9 @@ class PlayState extends FlxState
 		enemyInmovilBalas = new FlxTypedGroup<BalaEne>();
 		
 		/*HUD*/
-		lives = new FlxText(0, 216, 256, "Lives: ", 8);
-		score = new FlxText(0, 216, 256, "Score: ", 8);
-		highestScore = new FlxText(0, 216, 256, "Best: ", 8);
+		lives = new FlxText(0, 225, 256, "Lives: ", 8);
+		score = new FlxText(0, 225, 256, "Score: ", 8);
+		highestScore = new FlxText(0, 225, 256, "Best: ", 8);
 		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 12);
 		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 12);
 		
@@ -111,7 +110,7 @@ class PlayState extends FlxState
 		gameOver.scrollFactor.x = 0;
 		
 		/*ADD*/
-		add(background);
+		add(tilemap);
 		loader.loadEntities(entityCreator, "Entities");
 		
 		/*BOSS*/
@@ -254,7 +253,7 @@ class PlayState extends FlxState
 				default:
 					pwUpBar.animation.play("idle");
 			}
-		if (FlxG.keys.justPressed.C)
+		if (FlxG.keys.justPressed.Z)
 		{
 			switch (player.getPowerUpState()) 
 			{

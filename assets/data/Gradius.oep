@@ -16,7 +16,7 @@
     <Width>25600</Width>
     <Height>480</Height>
   </LevelMaximumSize>
-  <Filename>D:\Práctica Profesional I - Desarrollo de Videojuegos I\HaxeDevelop Projects\GradiusFlx\assets\data\Gradius.oep</Filename>
+  <Filename>E:\Práctica Profesional I - Desarrollo de Videojuegos I\HaxeDevelop Projects\GradiusFlx\assets\data\Gradius.oep</Filename>
   <AngleMode>Radians</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -32,7 +32,7 @@
       <Name>Entities</Name>
       <Grid>
         <Width>32</Width>
-        <Height>24</Height>
+        <Height>16</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -42,8 +42,8 @@
     <LayerDefinition xsi:type="TileLayerDefinition">
       <Name>Tiles</Name>
       <Grid>
-        <Width>32</Width>
-        <Height>24</Height>
+        <Width>16</Width>
+        <Height>16</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -57,8 +57,8 @@
       <Name>Tileset</Name>
       <FilePath>..\images\tiles.png</FilePath>
       <TileSize>
-        <Width>32</Width>
-        <Height>24</Height>
+        <Width>16</Width>
+        <Height>16</Height>
       </TileSize>
       <TileSep>0</TileSep>
     </Tileset>
@@ -88,7 +88,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyCoseno.png" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyCoseno.png" Tiled="true">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
@@ -118,7 +118,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyPerseguidor.png" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyPerseguidor.png" Tiled="true">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
