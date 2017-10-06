@@ -276,19 +276,28 @@ class PlayState extends FlxState
 	private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
 	{
 		ene.kill();
-		pl.preKill();
+		if (pl.isShielded())
+			pl.descShield();
+		else
+			pl.preKill();
 	}
 	
 	private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
 	{
 		ene.kill();
-		pl.preKill();
+		if (pl.isShielded())
+			pl.descShield();
+		else
+			pl.preKill();
 	}
 	
 	private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
 	{
 		ene.kill();
-		pl.preKill();
+		if (pl.isShielded())
+			pl.descShield();
+		else
+			pl.preKill();
 	}
 	
 	private function damageBosito(shot:Bala, bosito:Boss):Void
