@@ -38,7 +38,7 @@ class Boss extends FlxSprite
 		{
 			if (framesEntreBalas >= 100)
 			{
-				var nuevaBala = new BalaBoss (x + width, y + height / 2);
+				var nuevaBala = new BalaBoss (x, y + height / 2);
 				balasArray.add(nuevaBala);
 				framesEntreBalas = 0;
 			}
@@ -48,7 +48,7 @@ class Boss extends FlxSprite
 			speed = Reg.bossBerserkSpeed;
 			if (framesEntreBalas >= 50)
 			{
-				var nuevaBala = new BalaBoss (x + width, y + height / 2);
+				var nuevaBala = new BalaBoss (x, y + height / 2);
 				balasArray.add(nuevaBala);
 				framesEntreBalas = 0;
 			}

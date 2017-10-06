@@ -51,7 +51,7 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		super.update(elapsed);
 		
 		timeBtwLaser++;
-		if (timeBtwLaser >= 110)
+		if (timeBtwLaser >= 300)
 		{
 			timeBtwLaser = 0;
 			disparo();

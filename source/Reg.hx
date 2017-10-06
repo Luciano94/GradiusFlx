@@ -19,9 +19,9 @@ class Reg
 	static public var playerRef:Player;
 	static inline public var numberOfPowerUps:Int = 5;
 	// Cosas de Boss
-	static public var bossNormalSpeed:Int = 10;
+	static public var bossNormalSpeed:Int = 20;
 	static public var bossFramesEntreBalas:Int = 0;
-	static public var bossBerserkSpeed:Int = 20;
+	static public var bossBerserkSpeed:Int = 40;
 	// Cosas de EnemyInmovil
 	static public var enemyBalaSpeed:Int = 60;
 	static public var timer:Float = 0;
