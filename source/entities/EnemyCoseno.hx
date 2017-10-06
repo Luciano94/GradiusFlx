@@ -50,8 +50,7 @@ class EnemyCoseno extends FlxSprite
 		
 		hitPoints = Reg.enemyCShp;
 		//	FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the whole freaking game!
-	}
-x	
+	}	
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
