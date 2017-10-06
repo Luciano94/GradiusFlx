@@ -16,7 +16,7 @@ class Boss extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset, ?bossBalasArray:FlxTypedGroup<BalaEne>) 
 	{
 		super(X, Y, SimpleGraphic);
-		loadGraphic(AssetPaths.Boss__png, 64, 120, false);
+		loadGraphic(AssetPaths.Boss__png, false, 64, 120);
 		life = 100;
 		framesEntreBalas = Reg.bossFramesEntreBalas;
 		balasArray = bossBalasArray;

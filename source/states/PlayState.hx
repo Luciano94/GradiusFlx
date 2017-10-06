@@ -53,7 +53,7 @@ class PlayState extends FlxState
 	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
 	/*Obstacles*/
 	private var obstacles:FlxTypedGroup<Obstacle>;
-	//public var  bosito:Boss;
+	public var  bosito:Boss;
 	private var bossBalas:FlxTypedGroup<BalaEne>;
 	private var loader:FlxOgmoLoader;
 	private var bositoBar:FlxBar;
@@ -97,7 +97,6 @@ class PlayState extends FlxState
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyInmovilBalas = new FlxTypedGroup<BalaEne>();
 		bossBalas = new FlxTypedGroup<BalaEne>();
-		//bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
 		
 		/*OBSTACLES*/
 		obstacles = new FlxTypedGroup<Obstacle>();
@@ -143,8 +142,8 @@ class PlayState extends FlxState
 		add(enemyInmovil);
 		add(enemyInmovilBalas);
 		add(enemyCoseno);
+		add(enemyInmovilBalas);
 		add(obstacles);
-		//add(bosito);
 		add(bositoBar);
 		add(lives);
 		add(score);
@@ -176,6 +175,9 @@ class PlayState extends FlxState
 			case "Obstacles":
 				var obstacle = new Obstacle(x, y, AssetPaths.obstacle__png);
 				obstacles.add(obstacle);
+			case "Boss":
+				bosito = new Boss(x, y, bossBalas);
+				add(bosito);
 		}
 	}
 
@@ -184,12 +186,14 @@ class PlayState extends FlxState
 		if (!Reg.gameOver && !Reg.paused)
 		{
 			super.update(elapsed);
+			
 			/*Camera*/
-			//if (FlxG.overlap(guide, bosito))
-			//{
-			//	guide.velocity.x = 0;
-			//	player.setBoss();
-			//}
+			if (FlxG.overlap(guide, bosito))
+			{
+				guide.velocity.x = 0;
+				player.setBoss();
+			}
+			
 			/*Power UP*/
 			sistemaPowerUp();
 			checkOptions();
@@ -203,20 +207,16 @@ class PlayState extends FlxState
 			FlxG.overlap(player.get_balaArray(), enemyCoseno, damageEnemyCoseno);
 			FlxG.overlap(player.get_balaArray(), enemyPerseguidor, damageEnemyPerseguidor);
 			FlxG.overlap(player.get_balaArray(), obstacles, destroyObstacle);
-			//FlxG.overlap(player.get_balaArray(), bosito, damageBosito);
+			FlxG.overlap(player.get_balaArray(), bosito, damageBosito);
 			FlxG.overlap(player.get_misilArray(), enemyInmovil, damageEnemyInmovil);
 			FlxG.overlap(player.get_misilArray(), enemyCoseno, damageEnemyCoseno);
 			FlxG.overlap(player.get_misilArray(), enemyPerseguidor, damageEnemyPerseguidor);
 			FlxG.overlap(player.get_misilArray(), obstacles, destroyObstacle);
-			//FlxG.overlap(player.get_misilArray(), bosito, colMisilBosito);
 			FlxG.overlap(enemyInmovil, player, enemyPlayerCollision);
 			FlxG.overlap(enemyCoseno, player, enemyPlayerCollision);
 			FlxG.overlap(enemyPerseguidor, player, enemyPlayerCollision);
+			FlxG.overlap(bosito, player, colBossPlayer);
 			FlxG.overlap(obstacles, player, obstaclePlayerCollision);
-			//FlxG.overlap(enemyInmovil, player, colEneInPlayer);
-			//FlxG.overlap(enemyPerseguidor, player, colEnePerPlayer);
-			//FlxG.overlap(enemyCoseno, player, colEneCosPlayer);
-			//FlxG.overlap(bosito, player, colBossPlayer);
 			FlxG.collide(tilemap, player, tilemapPlayerCollision);
 		}
 		
@@ -242,26 +242,6 @@ class PlayState extends FlxState
 
 	/*-----------------------Collision-----------------------*/
 	
-	// We don´t need so many functions, as we can use the "enemyPlayerCollision(enemy, player)" for all the cases.
-	
-	//private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
-	//{
-		//ene.kill();
-		//pl.preKill();
-	//}
-	//
-	//private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
-	//{
-		//ene.kill();
-		//pl.preKill();
-	//}
-	//
-	//private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
-	//{
-		//ene.kill();
-		//pl.preKill();
-	//}
-	
 	/*Tilemap*/
 	
 	private	function tilemapPlayerCollision(tilemap:FlxTilemap, player:Player):Void
@@ -274,6 +254,7 @@ class PlayState extends FlxState
 	{
 		playa.powerUpCollision();
 		power.destroy();
+		pwUp.remove(power, true);
 	}
 	/*Enemies*/
 	
@@ -287,7 +268,10 @@ class PlayState extends FlxState
 	{
 		obstacles.remove(obstacle, true);
 		obstacle.destroy();
-		player.preKill();
+		if (player.isShielded())
+			player.descShield();
+		else
+			player.preKill();		
 	}
 	
 	private function damageEnemyInmovil(shot, enemy:EnemyInmovil):Void
@@ -327,72 +311,15 @@ class PlayState extends FlxState
 		obstacle.destroy();
 	}
 	
-	//private function colmisilEneInm(shot:Misil, enemy:EnemyInmovil):Void
-	//{
-		//Reg.score += 10;
-		//shot.destroy();
-		//enemy.destroy();
-	//}
-	//
-	//private function colMisilEnemyCoseno(shot:Misil, enemy:EnemyCoseno):Void
-	//{
-		//Reg.score += 20;
-		//shot.destroy();
-		//if (player.isLaser())
-			//enemy.destroy();
-		//else
-	    	//enemy.getDamage();		
-	//}
-	//
-	//private function colMisilEnemyPerseguidor(shot:Misil, enemy:EnemyPerseguidor):Void 
-	//{
-		//Reg.score += 30;
-		//shot.destroy();
-		//enemy.destroy();
-	//}
-	
-	private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
-	{
-		ene.kill();
-		if (pl.isShielded())
-			pl.descShield();
-		else
-			pl.preKill();
-	}
-	
-	private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
-	{
-		ene.kill();
-		if (pl.isShielded())
-			pl.descShield();
-		else
-			pl.preKill();
-	}
-	
-	private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
-	{
-		ene.kill();
-		if (pl.isShielded())
-			pl.descShield();
-		else
-			pl.preKill();
-	}
-	
 	private function damageBosito(shot:Bala, bosito:Boss):Void
 	{
 		shot.destroy();
 		bosito.getDamage();
 	}
 	
-	private function colMisilBosito(shot:Misil, bosito:Boss):Void
+	private function colBossPlayer(bos:Boss, player:Player):Void
 	{
-		shot.destroy();
-		bosito.getDamage();
-	}
-	
-	private function colBossPlayer(bos:Boss, pl:Player):Void
-	{
-		pl.preKill();
+		player.preKill();
 	}
 	
 	/*-----------------------Power UP-----------------------*/
