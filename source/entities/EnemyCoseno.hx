@@ -8,23 +8,28 @@ import flixel.math.FlxMath;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRandom;
 
 class EnemyCoseno extends FlxSprite 
 { 
 	private var hitPoints:Int;
 	private var normalizado:Bool;
+	private var proba:FlxRandom;
 	public var pwUp:FlxTypedGroup<PowerUp>;
 	private var speed:Int;
 	private var randomVelocity:FlxRandom;
 	private var outOfBounds:Bool;
 	
-	public function new(?X:Float = 0, ?Y:Float = 0, ?Normalizado:Bool = true, PwUp:FlxTypedGroup<PowerUp>)
+	public function new(?X:Float = 0, ?Y:Float = 0, PwUp:FlxTypedGroup<PowerUp>)
 	{
 		super(X, Y);
 		
 		loadGraphic(AssetPaths.enemyCoseno__png, true, 32, 16);
 		randomVelocity = new FlxRandom();
-		normalizado = Normalizado;
+		
+		proba = new FlxRandom();
+		normalizado = proba.bool(70);
+		
 		
 		if (normalizado)
 		{

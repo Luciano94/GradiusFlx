@@ -5,14 +5,16 @@ import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRandom;
 
 class EnemyPerseguidor extends FlxSprite 
 {
 	private var normalizado:Bool;
+	private var proba:FlxRandom;
 	public var pwUp:FlxTypedGroup<PowerUp>;
 	private var outOfBounds:Bool;
 	
-	public function new(?X:Float = 0, ?Y:Float = 0, ?Normalizado:Bool = true, PwUp:FlxTypedGroup<PowerUp>)
+	public function new(?X:Float = 0, ?Y:Float = 0, PwUp:FlxTypedGroup<PowerUp>)
 	{
 		super(X, Y);
 		
@@ -21,9 +23,11 @@ class EnemyPerseguidor extends FlxSprite
 		width = 15;
 		height = 14;
 		offset.set(9, 1);
-		normalizado = Normalizado;
 		outOfBounds = false;
 		pwUp = PwUp;
+		
+		proba = new FlxRandom();
+		normalizado = proba.bool(70);
 		
 		animation.add("idle", [0]);
 		animation.add("arriba", [1]);

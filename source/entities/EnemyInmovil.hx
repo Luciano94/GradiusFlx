@@ -2,9 +2,9 @@ package entities;
 
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
-import flixel.math.FlxRandom;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
+import flixel.math.FlxRandom;
 
 class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 {
@@ -14,10 +14,11 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	private var posY:Int;
 	private var timeBtwLaser:Int;
 	private var normalizado:Bool;
+	private var proba:FlxRandom;
 	public var balaEne:FlxTypedGroup<BalaEne>;
 	public var pwUp:FlxTypedGroup<PowerUp>;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?Normalizado:Bool=true, PwUp:FlxTypedGroup<PowerUp>, EnemyInmovilBalas:FlxTypedGroup<BalaEne>)
+	public function new(?X:Float=0, ?Y:Float=0, PwUp:FlxTypedGroup<PowerUp>, EnemyInmovilBalas:FlxTypedGroup<BalaEne>)
 	{
 		super(X, Y);
 		loadGraphic(AssetPaths.enemyInmovil__png, true, 32, 16);
@@ -26,9 +27,11 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		width = 14;
 		height = 14;
 		offset.set(9, 1);
-		normalizado = Normalizado;
 		pwUp = PwUp;
 		timeBtwLaser = 0;
+		
+		proba = new FlxRandom();
+		normalizado = proba.bool(70);
 		
 		animation.add("medio", [0]);
 		animation.add("medioP", [3]);
@@ -68,7 +71,7 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		FlxG.sound.play(AssetPaths.enemyExploding__wav);
 		if (!normalizado)
 		{
-			var nuevoPowerUp = new PowerUp(x + width , y + height);
+			var nuevoPowerUp = new PowerUp(x, y - 15);
 			pwUp.add(nuevoPowerUp);
 		}
 	}

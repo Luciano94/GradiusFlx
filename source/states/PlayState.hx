@@ -54,7 +54,7 @@ class PlayState extends FlxState
 	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
 	/*Obstacles*/
 	private var obstacles:FlxTypedGroup<Obstacle>;
-	public var  bosito:Boss;
+	private var  bosito:Boss;
 	private var bossBalas:FlxTypedGroup<BalaBoss>;
 	private var loader:FlxOgmoLoader;
 	private var bositoBar:FlxBar;
@@ -130,7 +130,7 @@ class PlayState extends FlxState
 		loader.loadEntities(entityCreator, "Entities");
 		
 		/*BOSS*/
-		bositoBar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 30, 5, player, "vidas", 0, 3, true);
+		bositoBar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 30, -5, bosito, "life", 0, 100, true);
 		
 		/*ADD*/
 		add(guide);
@@ -164,13 +164,13 @@ class PlayState extends FlxState
 				Reg.playerRef = player;
 				add(player);
 			case "CosineEnemies":
-				var cosineEnemy = new EnemyCoseno(x, y, false, pwUp);
+				var cosineEnemy = new EnemyCoseno(x, y, pwUp);
 				enemyCoseno.add(cosineEnemy);
 			case "StaticEnemies":
-				var staticEnemy = new EnemyInmovil(x, y, false, pwUp, enemyInmovilBalas);
+				var staticEnemy = new EnemyInmovil(x, y, pwUp, enemyInmovilBalas);
 				enemyInmovil.add(staticEnemy);
 			case "ChasingEnemies":
-				var chasingEnemy = new EnemyPerseguidor(x, y, false, pwUp);
+				var chasingEnemy = new EnemyPerseguidor(x, y, pwUp);
 				enemyPerseguidor.add(chasingEnemy);	
 			case "Obstacles":
 				var obstacle = new Obstacle(x, y, AssetPaths.obstacle__png);
