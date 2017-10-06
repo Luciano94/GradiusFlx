@@ -16,7 +16,7 @@
     <Width>25600</Width>
     <Height>480</Height>
   </LevelMaximumSize>
-  <Filename>D:\Práctica Profesional I - Desarrollo de Videojuegos I\HaxeDevelop Projects\GradiusFlx\assets\data\Gradius.oep</Filename>
+  <Filename>C:\Users\Ignacio Mosconi\Documents\HaxeDevelop Projects\GradiusFlx\assets\data\Gradius.oep</Filename>
   <AngleMode>Radians</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -28,22 +28,11 @@
     <ValueDefinition xsi:type="IntValueDefinition" Name="Number" Default="1" Min="1" Max="100" ShowSlider="false" />
   </LevelValueDefinitions>
   <LayerDefinitions>
-    <LayerDefinition xsi:type="EntityLayerDefinition">
-      <Name>Entities</Name>
-      <Grid>
-        <Width>32</Width>
-        <Height>24</Height>
-      </Grid>
-      <ScrollFactor>
-        <X>1</X>
-        <Y>1</Y>
-      </ScrollFactor>
-    </LayerDefinition>
     <LayerDefinition xsi:type="TileLayerDefinition">
       <Name>Tiles</Name>
       <Grid>
-        <Width>32</Width>
-        <Height>24</Height>
+        <Width>16</Width>
+        <Height>16</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -51,14 +40,25 @@
       </ScrollFactor>
       <ExportMode>CSV</ExportMode>
     </LayerDefinition>
+    <LayerDefinition xsi:type="EntityLayerDefinition">
+      <Name>Entities</Name>
+      <Grid>
+        <Width>16</Width>
+        <Height>16</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+    </LayerDefinition>
   </LayerDefinitions>
   <Tilesets>
     <Tileset>
       <Name>Tileset</Name>
       <FilePath>..\images\tiles.png</FilePath>
       <TileSize>
-        <Width>32</Width>
-        <Height>24</Height>
+        <Width>16</Width>
+        <Height>16</Height>
       </TileSize>
       <TileSep>0</TileSep>
     </Tileset>
@@ -73,7 +73,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="..\images\spaceship.png" Tiled="true">
+      <ImageDefinition DrawMode="Image" ImagePath="..\images\spaceship1.png" Tiled="true">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
@@ -88,7 +88,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyCoseno.png" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyCoseno.png" Tiled="true">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
@@ -118,7 +118,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyPerseguidor.png" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="..\images\enemyPerseguidor.png" Tiled="true">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />

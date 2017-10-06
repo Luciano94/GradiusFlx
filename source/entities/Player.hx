@@ -49,7 +49,7 @@ class Player extends FlxSprite
 		misilArray = playermisilArray;
 		framesEntreMisil = Reg.playerFramesEntreBala;
 		powerUpState = 0;
-		faster = speed * 2;
+		faster = Reg.playerPowerUpSpeed;
 		shield = false;
 		laser = false;
 		misil = false;
@@ -97,7 +97,7 @@ class Player extends FlxSprite
 	/*-----------------------Player-----------------------*/
 	private function disparo():Void
 	{
-		if (FlxG.keys.justPressed.SPACE && framesEntreBala >= 10)
+		if (FlxG.keys.justPressed.X && framesEntreBala >= 10)
 		{
 			var nuevaBala = new Bala(x + width, y + height / 2, laser);
 			if (misil && framesEntreMisil >= 50)
@@ -187,7 +187,7 @@ class Player extends FlxSprite
 		else
 		{
 			vidas--;
-			reset(10, FlxG.height / 2);
+			reset(camera.x, FlxG.height / 2);
 		}
 	}
 	
@@ -196,6 +196,11 @@ class Player extends FlxSprite
 		super.reset(X, Y);
 		
 		state = State.Alive;
+		speed = Reg.playerNormalSpeed;
+		laser = false;
+		misil = false;
+		shield = false;
+		powerUpState = 0;
 	}
 	
 	public function get_vidas():Int 
@@ -217,11 +222,13 @@ class Player extends FlxSprite
 	/*Collision*/
 	public function powerUpCollision()
 	{
-		if (powerUpState < 5) powerUpState++;
-		else powerUpState = 5;
+		if (powerUpState < Reg.numberOfPowerUps)
+			powerUpState++;
+		else
+			powerUpState = 1;
 	}
 	
-	/*Spped*/
+	/*Speed*/
 	public function doubleSpeed():Void
 	{
 		speed = faster;
@@ -259,7 +266,7 @@ class Player extends FlxSprite
 		return laser;
 	}
 	
-	/*misil*/
+	/*Misil*/
 	public function actMisil():Void
 	{
 		misil = true;
@@ -269,7 +276,7 @@ class Player extends FlxSprite
 		return misil;
 	}
 	
-	/*state*/
+	/*State*/
 	public function getPowerUpState():Int
 	{
 		return powerUpState;

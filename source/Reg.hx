@@ -17,6 +17,7 @@ class Reg
 	static public var playerBalaSpeed:Int = 250;
 	static public var playerFramesEntreBala:Int = 0;
 	static public var playerRef:Player;
+	static inline public var numberOfPowerUps:Int = 5;
 	// Cosas de Boss
 	static public var bossNormalSpeed:Int = 1;
 	static public var bossFramesEntreBalas:Int = 0;
