@@ -21,7 +21,7 @@ class Boss extends FlxSprite
 		framesEntreBalas = Reg.bossFramesEntreBalas;
 		balasArray = bossBalasArray;
 		speed = Reg.bossNormalSpeed;
-		velocity.set(Reg.cameraSpeed, speed);
+		velocity.set(0, speed);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -34,11 +34,24 @@ class Boss extends FlxSprite
 	
 	private function shot(): Void
 	{
-		if (framesEntreBalas >= 10)
+		if (life > 50)
 		{
-			var nuevaBala = new BalaEne (x + width, y + height / 2);
-			balasArray.add(nuevaBala);
-			framesEntreBalas = 0;
+			if (framesEntreBalas >= 100)
+			{
+				var nuevaBala = new BalaEne (x + width, y + height / 2);
+				balasArray.add(nuevaBala);
+				framesEntreBalas = 0;
+			}
+		}
+		else 
+		{
+			speed = Reg.bossBerserkSpeed;
+			if (framesEntreBalas >= 50)
+			{
+				var nuevaBala = new BalaEne (x + width, y + height / 2);
+				balasArray.add(nuevaBala);
+				framesEntreBalas = 0;
+			}
 		}
 	}
 	

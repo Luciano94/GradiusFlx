@@ -350,6 +350,33 @@ class PlayState extends FlxState
 		//enemy.destroy();
 	//}
 	
+	private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
+	{
+		ene.kill();
+		if (pl.isShielded())
+			pl.descShield();
+		else
+			pl.preKill();
+	}
+	
+	private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
+	{
+		ene.kill();
+		if (pl.isShielded())
+			pl.descShield();
+		else
+			pl.preKill();
+	}
+	
+	private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
+	{
+		ene.kill();
+		if (pl.isShielded())
+			pl.descShield();
+		else
+			pl.preKill();
+	}
+	
 	private function damageBosito(shot:Bala, bosito:Boss):Void
 	{
 		shot.destroy();
@@ -405,7 +432,7 @@ class PlayState extends FlxState
 				case 4:
 					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
 					player.resetPowerUpState();
-					if (op1)
+					if (op1 && !op2)
 					{
 						opt2 = new Options(opt1.x - opt1.width, opt1.y, playerBalas, playerMisiles, opt1);
 						op2 = true;
@@ -413,9 +440,12 @@ class PlayState extends FlxState
 					}	
 					else
 					{
-						opt1 = new Options(player.x - player.width, player.y, playerBalas, playerMisiles, player);
-						op1 = true;
-						add(opt1);
+						if (!op1)
+						{
+							opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
+							op1 = true;
+							add(opt1);
+						}
 					}
 				case 5:
 					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
