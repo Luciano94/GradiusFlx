@@ -1,6 +1,7 @@
 package states;
 
 import entities.Boss;
+import entities.BalaBoss;
 import entities.Guide;
 import entities.Misil;
 import entities.Obstacle;
@@ -53,8 +54,8 @@ class PlayState extends FlxState
 	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
 	/*Obstacles*/
 	private var obstacles:FlxTypedGroup<Obstacle>;
-	//public var  bosito:Boss;
-	private var bossBalas:FlxTypedGroup<BalaEne>;
+	public var  bosito:Boss;
+	private var bossBalas:FlxTypedGroup<BalaBoss>;
 	private var loader:FlxOgmoLoader;
 	private var bositoBar:FlxBar;
 	
@@ -96,8 +97,8 @@ class PlayState extends FlxState
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyInmovilBalas = new FlxTypedGroup<BalaEne>();
-		bossBalas = new FlxTypedGroup<BalaEne>();
-		//bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
+		bossBalas = new FlxTypedGroup<BalaBoss>();
+		bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
 		
 		/*OBSTACLES*/
 		obstacles = new FlxTypedGroup<Obstacle>();
@@ -143,9 +144,8 @@ class PlayState extends FlxState
 		add(enemyInmovil);
 		add(enemyInmovilBalas);
 		add(enemyCoseno);
-		add(enemyInmovilBalas);
 		add(obstacles);
-		//add(bosito);
+		add(bosito);
 		add(bositoBar);
 		add(lives);
 		add(score);
@@ -242,26 +242,6 @@ class PlayState extends FlxState
 	}
 
 	/*-----------------------Collision-----------------------*/
-	
-	// We don´t need so many functions, as we can use the "enemyPlayerCollision(enemy, player)" for all the cases.
-	
-	//private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
-	//{
-		//ene.kill();
-		//pl.preKill();
-	//}
-	//
-	//private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
-	//{
-		//ene.kill();
-		//pl.preKill();
-	//}
-	//
-	//private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
-	//{
-		//ene.kill();
-		//pl.preKill();
-	//}
 	
 	/*Tilemap*/
 	

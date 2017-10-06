@@ -58,9 +58,10 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	
 	private function disparo():Void 
 	{
-		var newBalaEne = new BalaEne(x + posX, y + posY);
+		var newBalaEne = new BalaEne(x, y);
 		balaEne.add(newBalaEne);
 	}
+	
 	override public function destroy():Void
 	{
 		super.destroy();
@@ -68,7 +69,7 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 		FlxG.sound.play(AssetPaths.enemyExploding__wav);
 		if (!normalizado)
 		{
-			var nuevoPowerUp = new PowerUp(x, y);
+			var nuevoPowerUp = new PowerUp(x + width , y + height);
 			pwUp.add(nuevoPowerUp);
 		}
 	}
