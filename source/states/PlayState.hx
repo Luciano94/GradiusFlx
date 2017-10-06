@@ -1,6 +1,7 @@
 package states;
 
 import entities.Boss;
+import entities.BalaBoss;
 import entities.Guide;
 import entities.Misil;
 import entities.Obstacle;
@@ -54,7 +55,7 @@ class PlayState extends FlxState
 	/*Obstacles*/
 	private var obstacles:FlxTypedGroup<Obstacle>;
 	public var  bosito:Boss;
-	private var bossBalas:FlxTypedGroup<BalaEne>;
+	private var bossBalas:FlxTypedGroup<BalaBoss>;
 	private var loader:FlxOgmoLoader;
 	private var bositoBar:FlxBar;
 	
@@ -96,7 +97,7 @@ class PlayState extends FlxState
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyInmovilBalas = new FlxTypedGroup<BalaEne>();
-		bossBalas = new FlxTypedGroup<BalaEne>();
+		bossBalas = new FlxTypedGroup<BalaBoss>();
 		
 		/*OBSTACLES*/
 		obstacles = new FlxTypedGroup<Obstacle>();
@@ -142,7 +143,6 @@ class PlayState extends FlxState
 		add(enemyInmovil);
 		add(enemyInmovilBalas);
 		add(enemyCoseno);
-		add(enemyInmovilBalas);
 		add(obstacles);
 		add(bositoBar);
 		add(lives);
@@ -192,6 +192,9 @@ class PlayState extends FlxState
 			{
 				guide.velocity.x = 0;
 				player.setBoss();
+				if (op1) opt1.setBoss();
+				if (op2) opt2.setBoss();
+				pwUpBar.velocity.x = 0;
 			}
 			
 			/*Power UP*/
@@ -218,6 +221,9 @@ class PlayState extends FlxState
 			FlxG.overlap(bosito, player, colBossPlayer);
 			FlxG.overlap(obstacles, player, obstaclePlayerCollision);
 			FlxG.collide(tilemap, player, tilemapPlayerCollision);
+			FlxG.overlap(bossBalas, player, colBulletPlayer);
+			FlxG.overlap(enemyInmovilBalas, player, colBulletEnePlayer);
+			
 		}
 		
 		lives.text = "Lives: " + player.vidas;
@@ -239,9 +245,24 @@ class PlayState extends FlxState
 			gameOver.visible = true;
 		}
 	}
-
 	/*-----------------------Collision-----------------------*/
+	private function colBulletPlayer(shot: BalaBoss , playa: Player )
+	{
+		shot.destroy();
+		if (player.isShielded())
+			player.descShield();
+		else
+			player.preKill();
+	}
 	
+	private function colBulletEnePlayer(shot: BalaEne , playa: Player )
+	{
+		shot.destroy();
+		if (player.isShielded())
+			player.descShield();
+		else
+			player.preKill();
+	}
 	/*Tilemap*/
 	
 	private	function tilemapPlayerCollision(tilemap:FlxTilemap, player:Player):Void

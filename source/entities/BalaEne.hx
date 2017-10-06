@@ -10,17 +10,12 @@ class BalaEne extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		loadGraphic(AssetPaths.rayoLaser__png, true, 16, 240);
-		animation.add("laser", [0, 1, 2, 3 , 4, 5, 6]);
-		animation.add("nada", [7]);
-		animation.play("laser");
-		
+		loadGraphic(AssetPaths.balaEne__png, true, 4, 4);
+		velocity.y = -50;
 	}
 	
 	override public function update (elapsed:Float):Void
 	{
 		super.update(elapsed);
-		if (animation.name == "laser" && animation.finished)
-			kill();
 	}
 }

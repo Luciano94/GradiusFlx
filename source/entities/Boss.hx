@@ -11,9 +11,9 @@ class Boss extends FlxSprite
 	public var life:Int;
 	private var speed:Float;
 	private var framesEntreBalas:Int;
-	private var balasArray:FlxTypedGroup<BalaEne>;
+	private var balasArray:FlxTypedGroup<BalaBoss>;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset, ?bossBalasArray:FlxTypedGroup<BalaEne>) 
+	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset, ?bossBalasArray:FlxTypedGroup<BalaBoss>) 
 	{
 		super(X, Y, SimpleGraphic);
 		loadGraphic(AssetPaths.Boss__png, false, 64, 120);
@@ -38,7 +38,7 @@ class Boss extends FlxSprite
 		{
 			if (framesEntreBalas >= 100)
 			{
-				var nuevaBala = new BalaEne (x + width, y + height / 2);
+				var nuevaBala = new BalaBoss (x, y + height / 2);
 				balasArray.add(nuevaBala);
 				framesEntreBalas = 0;
 			}
@@ -48,7 +48,7 @@ class Boss extends FlxSprite
 			speed = Reg.bossBerserkSpeed;
 			if (framesEntreBalas >= 50)
 			{
-				var nuevaBala = new BalaEne (x + width, y + height / 2);
+				var nuevaBala = new BalaBoss (x, y + height / 2);
 				balasArray.add(nuevaBala);
 				framesEntreBalas = 0;
 			}
