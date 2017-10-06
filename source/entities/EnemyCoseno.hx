@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.math.FlxMath;
@@ -46,16 +47,19 @@ class EnemyCoseno extends FlxSprite
 		hitPoints--;
 		if (hitPoints == 0)
 			destroy();
+		else
+			FlxG.sound.play(AssetPaths.damageEnemy__wav);
 	}
 	
 	override public function destroy():Void
 	{
 		super.destroy();
 		
+		FlxG.sound.play(AssetPaths.enemyExploding__wav);
 		if (!normalizado)
 		{
-		var nuevoPowerUp = new PowerUp(x, y);
-		pwUp.add(nuevoPowerUp);
+			var nuevoPowerUp = new PowerUp(x, y);
+			pwUp.add(nuevoPowerUp);
 		}
 	}
 }

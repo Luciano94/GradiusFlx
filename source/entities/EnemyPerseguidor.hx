@@ -45,7 +45,6 @@ class EnemyPerseguidor extends FlxSprite
 	
 	public function movimiento():Void 
 	{
-		
 		if (y >= Reg.playerRef.y + 2)
 		{
 			velocity.x = -Reg.enemySpeedX;
@@ -80,11 +79,11 @@ class EnemyPerseguidor extends FlxSprite
 	{
 		super.destroy();
 		
+		FlxG.sound.play(AssetPaths.enemyExploding__wav);
 		if (!normalizado)
 		{
 		var nuevoPowerUp = new PowerUp(x, y);
 		pwUp.add(nuevoPowerUp);
 		}
 	}
-	
 }

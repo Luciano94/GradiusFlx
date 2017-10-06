@@ -3,10 +3,6 @@ package entities;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
-/**
- * ...
- * @author holis
- */
 class PwUpBar extends FlxSprite 
 {
 

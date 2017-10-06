@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.math.FlxRandom;
@@ -95,10 +96,11 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 	{
 		super.destroy();
 		
+		FlxG.sound.play(AssetPaths.enemyExploding__wav);
 		if (!normalizado)
 		{
-		var nuevoPowerUp = new PowerUp(x, y);
-		pwUp.add(nuevoPowerUp);
+			var nuevoPowerUp = new PowerUp(x, y);
+			pwUp.add(nuevoPowerUp);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package states;
 import entities.Boss;
 import entities.Guide;
 import entities.Misil;
+import entities.Obstacle;
 import entities.Options;
 import entities.PowerUp;
 import entities.Player;
@@ -50,11 +51,15 @@ class PlayState extends FlxState
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
+	/*Obstacles*/
+	private var obstacles:FlxTypedGroup<Obstacle>;
 	//public var  bosito:Boss;
 	private var bossBalas:FlxTypedGroup<BalaEne>;
-	private var tilemap:FlxTilemap;
 	private var loader:FlxOgmoLoader;
 	private var bositoBar:FlxBar;
+	
+	/*Tilemap*/
+	private var tilemap:FlxTilemap;
 	
 	override public function create():Void
 	{
@@ -64,11 +69,11 @@ class PlayState extends FlxState
 		FlxG.worldBounds.set(0, 0, 7680, 240);
 		loader = new FlxOgmoLoader(AssetPaths.Level__oel);
 		tilemap = loader.loadTilemap(AssetPaths.tiles__png, 16, 16, "Tiles");
-		//tilemap.setTileProperties(0, FlxObject.NONE);
-		//for (i in 1... 19) 
-		//{
-			//tilemap.setTileProperties(i, FlxObject.ANY);
-		//}
+		tilemap.setTileProperties(0, FlxObject.NONE);
+		for (i in 1...18)	// Find a way to avoid hard-coding this.
+		{
+			tilemap.setTileProperties(i, FlxObject.ANY);
+		}
 		
 		/*PLAYER*/
 		playerBalas = new FlxTypedGroup<Bala>();
@@ -79,11 +84,7 @@ class PlayState extends FlxState
 		op1 = false;
 		op2 = false;
 		pwUp = new FlxTypedGroup<PowerUp>();
-		pwUp.add(new PowerUp(100, 100));
-		pwUp.add(new PowerUp(200, 100));
-		pwUp.add(new PowerUp(250, 150));
-		pwUp.add(new PowerUp(220, 150));
-		
+
 		/*CAMERA*/
 		guide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
 		guide.makeGraphic(1, 1, 0x00000000);
@@ -98,10 +99,13 @@ class PlayState extends FlxState
 		bossBalas = new FlxTypedGroup<BalaEne>();
 		//bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
 		
+		/*OBSTACLES*/
+		obstacles = new FlxTypedGroup<Obstacle>();
+		
 		/*TEXT*/
 		lives = new FlxText(0, 225, 256, "Lives: ", 8);
 		score = new FlxText(0, 225, 256, "Score: ", 8);
-		highestScore = new FlxText(0, 225, 256, "Best: ", 8);
+		highestScore = new FlxText(0, 225, 256, "Highest: ", 8);
 		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 12);
 		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 12);
 		
@@ -138,6 +142,7 @@ class PlayState extends FlxState
 		add(enemyPerseguidor);
 		add(enemyInmovil);
 		add(enemyCoseno);
+		add(obstacles);
 		//add(bosito);
 		add(bositoBar);
 		add(lives);
@@ -167,6 +172,9 @@ class PlayState extends FlxState
 			case "ChasingEnemies":
 				var chasingEnemy = new EnemyPerseguidor(x, y, false, pwUp);
 				enemyPerseguidor.add(chasingEnemy);	
+			case "Obstacles":
+				var obstacle = new Obstacle(x, y, AssetPaths.obstacle__png);
+				obstacles.add(obstacle);
 		}
 	}
 
@@ -193,20 +201,27 @@ class PlayState extends FlxState
 			FlxG.overlap(player.get_balaArray(), enemyInmovil, damageEnemyInmovil);
 			FlxG.overlap(player.get_balaArray(), enemyCoseno, damageEnemyCoseno);
 			FlxG.overlap(player.get_balaArray(), enemyPerseguidor, damageEnemyPerseguidor);
+			FlxG.overlap(player.get_balaArray(), obstacles, destroyObstacle);
 			//FlxG.overlap(player.get_balaArray(), bosito, damageBosito);
-			FlxG.overlap(player.get_misilArray(), enemyInmovil, colmisilEneInm);
-			FlxG.overlap(player.get_misilArray(), enemyCoseno, colMisilEnemyCoseno);
-			FlxG.overlap(player.get_misilArray(), enemyPerseguidor, colMisilEnemyPerseguidor);
+			FlxG.overlap(player.get_misilArray(), enemyInmovil, damageEnemyInmovil);
+			FlxG.overlap(player.get_misilArray(), enemyCoseno, damageEnemyCoseno);
+			FlxG.overlap(player.get_misilArray(), enemyPerseguidor, damageEnemyPerseguidor);
+			FlxG.overlap(player.get_misilArray(), obstacles, destroyObstacle);
 			//FlxG.overlap(player.get_misilArray(), bosito, colMisilBosito);
-			FlxG.overlap(enemyInmovil, player, colEneInPlayer);
-			FlxG.overlap(enemyPerseguidor, player, colEnePerPlayer);
-			FlxG.overlap(enemyCoseno, player, colEneCosPlayer);
+			FlxG.overlap(enemyInmovil, player, enemyPlayerCollision);
+			FlxG.overlap(enemyCoseno, player, enemyPlayerCollision);
+			FlxG.overlap(enemyPerseguidor, player, enemyPlayerCollision);
+			FlxG.overlap(obstacles, player, obstaclePlayerCollision);
+			//FlxG.overlap(enemyInmovil, player, colEneInPlayer);
+			//FlxG.overlap(enemyPerseguidor, player, colEnePerPlayer);
+			//FlxG.overlap(enemyCoseno, player, colEneCosPlayer);
 			//FlxG.overlap(bosito, player, colBossPlayer);
+			FlxG.collide(tilemap, player, tilemapPlayerCollision);
 		}
 		
 		lives.text = "Lives: " + player.vidas;
 		score.text = "Score: " + Reg.score;
-		highestScore.text = "Best: " + Reg.highestScore;
+		highestScore.text = "Highest: " + Reg.highestScore;
 		
 		if (Reg.highestScore > 0)
 			highestScore.visible = true;
@@ -215,6 +230,7 @@ class PlayState extends FlxState
 		{
 			Reg.paused = !Reg.paused;
 			paused.visible = !paused.visible;
+			FlxG.sound.play(AssetPaths.pause__wav);
 		}
 		
 		if (Reg.gameOver)
@@ -224,42 +240,120 @@ class PlayState extends FlxState
 	}
 
 	/*-----------------------Collision-----------------------*/
-	private function checkOptions():Void 
+	
+	// We don´t need so many functions, as we can use the "enemyPlayerCollision(enemy, player)" for all the cases.
+	
+	//private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
+	//{
+		//ene.kill();
+		//pl.preKill();
+	//}
+	//
+	//private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
+	//{
+		//ene.kill();
+		//pl.preKill();
+	//}
+	//
+	//private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
+	//{
+		//ene.kill();
+		//pl.preKill();
+	//}
+	
+	/*Tilemap*/
+	
+	private	function tilemapPlayerCollision(tilemap:FlxTilemap, player:Player):Void
 	{
-		if (op1 && player.getState())
-		{
-			opt1.destroy();
-			op1 = false;
-		}
-		if (op2 && player.getState())
-		{
-			opt2.destroy();
-			op2 = false;
-		}
+		player.preKill();
+	}
+	/*PwUp*/
+	
+	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
+	{
+		playa.powerUpCollision();
+		power.destroy();
+	}
+	/*Enemies*/
+	
+	private	function enemyPlayerCollision(enemy, player:Player):Void
+	{
+		enemy.destroy();
+		player.preKill();
 	}
 	
-	private function colmisilEneInm(shot:Misil, enemy:EnemyInmovil):Void
+	private function obstaclePlayerCollision(obstacle:Obstacle, player:Player)
+	{
+		obstacles.remove(obstacle, true);
+		obstacle.destroy();
+		player.preKill();
+	}
+	
+	private function damageEnemyInmovil(shot, enemy:EnemyInmovil):Void
 	{
 		Reg.score += 10;
 		shot.destroy();
+		enemyInmovil.remove(enemy, true);
 		enemy.destroy();
 	}
 	
-	private function colMisilEnemyCoseno(shot:Misil, enemy:EnemyCoseno):Void
+	private function damageEnemyCoseno(shot, enemy:EnemyCoseno):Void
 	{
 		Reg.score += 20;
 		shot.destroy();
 		if (player.isLaser())
+		{
+			enemyCoseno.remove(enemy, true);
 			enemy.destroy();
+		}
 		else
 	    	enemy.getDamage();		
-	}
+	}   
 	
-	private function colMisilEnemyPerseguidor(shot:Misil, enemy:EnemyPerseguidor):Void 
+	private function damageEnemyPerseguidor(shot, enemy:EnemyPerseguidor):Void 
 	{
 		Reg.score += 30;
 		shot.destroy();
+		enemyPerseguidor.remove(enemy);
 		enemy.destroy();
+	}
+	
+	private function destroyObstacle(shot, obstacle:Obstacle):Void
+	{
+		Reg.score += 5;
+		shot.destroy();
+		obstacles.remove(obstacle);
+		obstacle.destroy();
+	}
+	
+	//private function colmisilEneInm(shot:Misil, enemy:EnemyInmovil):Void
+	//{
+		//Reg.score += 10;
+		//shot.destroy();
+		//enemy.destroy();
+	//}
+	//
+	//private function colMisilEnemyCoseno(shot:Misil, enemy:EnemyCoseno):Void
+	//{
+		//Reg.score += 20;
+		//shot.destroy();
+		//if (player.isLaser())
+			//enemy.destroy();
+		//else
+	    	//enemy.getDamage();		
+	//}
+	//
+	//private function colMisilEnemyPerseguidor(shot:Misil, enemy:EnemyPerseguidor):Void 
+	//{
+		//Reg.score += 30;
+		//shot.destroy();
+		//enemy.destroy();
+	//}
+	
+	private function damageBosito(shot:Bala, bosito:Boss):Void
+	{
+		shot.destroy();
+		bosito.getDamage();
 	}
 	
 	private function colMisilBosito(shot:Misil, bosito:Boss):Void
@@ -271,73 +365,6 @@ class PlayState extends FlxState
 	private function colBossPlayer(bos:Boss, pl:Player):Void
 	{
 		pl.preKill();
-	}
-	
-	private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
-	{
-		ene.kill();
-		pl.preKill();
-	}
-	
-	private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
-	{
-		ene.kill();
-		pl.preKill();
-	}
-	
-	private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
-	{
-		ene.kill();
-		pl.preKill();
-	}
-	
-	private function damageBosito(shot:Bala, bosito:Boss):Void
-	{
-		shot.destroy();
-		bosito.getDamage();
-	}
-	/*Tilemap*/
-	private	function playerTilemapCollision(tilemap:FlxTilemap, player:Player):Void
-	{
-		player.preKill();
-	}
-	
-	
-	/*PwUp*/
-	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
-	{
-		playa.powerUpCollision();
-		power.kill();
-	}
-	/*Enemies*/
-	private	function enemyPlayerCollision(enemy, player:Player):Void
-	{
-		enemy.destroy();
-		player.preKill();
-		deleteOptions();
-	}
-	
-	private function damageEnemyInmovil(shot:Bala, enemy:EnemyInmovil):Void
-	{
-		Reg.score += 10;
-		shot.destroy();
-		enemy.destroy();
-	}
-	
-	private function damageEnemyCoseno(shot:Bala, enemy:EnemyCoseno):Void
-	{
-		Reg.score += 20;
-		shot.destroy();
-		if (player.isLaser())
-			enemy.destroy();
-		else
-	    	enemy.getDamage();		
-	}   
-	private function damageEnemyPerseguidor(shot:Bala, enemy:EnemyPerseguidor):Void 
-	{
-		Reg.score += 30;
-		shot.destroy();
-		enemy.destroy();
 	}
 	
 	/*-----------------------Power UP-----------------------*/
@@ -359,34 +386,39 @@ class PlayState extends FlxState
 				pwUpBar.animation.play("idle");
 		}
 		
-		if (FlxG.keys.justPressed.Z)
+		if (FlxG.keys.justPressed.Z)	//This should probably be a player method.
 		{
 			switch (player.getPowerUpState()) 
 			{
 				case 1:
+					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
 					player.resetPowerUpState();
 					player.doubleSpeed();
 				case 2:
+					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
 					player.resetPowerUpState();
 					player.actlaser();
 				case 3:
+					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
 					player.resetPowerUpState();
 					player.actMisil();
 				case 4:
+					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
 					player.resetPowerUpState();
 					if (op1)
 					{
-						opt2 = new Options (opt1.x - opt1.width, opt1.y, playerBalas, playerMisiles, opt1);
+						opt2 = new Options(opt1.x - opt1.width, opt1.y, playerBalas, playerMisiles, opt1);
 						op2 = true;
 						add(opt2);
 					}	
 					else
 					{
-						opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
+						opt1 = new Options(player.x - player.width, player.y, playerBalas, playerMisiles, player);
 						op1 = true;
 						add(opt1);
 					}
 				case 5:
+					FlxG.sound.play(AssetPaths.powerUpActivation__wav);
 					player.resetPowerUpState();
 					player.actShield();
 				default:
@@ -394,11 +426,17 @@ class PlayState extends FlxState
 		}
 	}
 	
-	private function deleteOptions():Void 
+	private function checkOptions():Void 
 	{
-		if (opt1 != null)
-			opt1.kill();
-		if (opt2 != null)
-			opt2.kill();
+		if (op1 && player.getState())
+		{
+			opt1.destroy();
+			op1 = false;
+		}
+		if (op2 && player.getState())
+		{
+			opt2.destroy();
+			op2 = false;
+		}
 	}
 }

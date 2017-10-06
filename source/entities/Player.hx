@@ -18,17 +18,17 @@ class Player extends FlxSprite
 	private var speed:Int;
 	public var vidas(get, null):Int;
 	private var framesEntreBala:Int;
-	private var balaArray:FlxTypedGroup<Bala>;
+	public var balaArray(get, null):FlxTypedGroup<Bala>;
 	public var bala(get, null):Bala;
 	private var state:State;
 	/*Boss*/
 	private var boss:Bool;
 	/*Power Ups*/
 	private var faster:Int;
-	private var shield: Bool;
-	private var laser: Bool;
-	private var misil: Bool;
-	private var misilArray:FlxTypedGroup<Misil>;
+	private var shield:Bool;
+	private var laser:Bool;
+	private var misil:Bool;
+	public var misilArray(get, null):FlxTypedGroup<Misil>;
 	private var framesEntreMisil:Int;
 	public var powerUpState:Int;
 	
@@ -106,6 +106,12 @@ class Player extends FlxSprite
 		if (FlxG.keys.justPressed.X && framesEntreBala >= 10)
 		{
 			var nuevaBala = new Bala(x + width, y + height / 2, laser);
+			
+			if (laser)
+				FlxG.sound.play(AssetPaths.playerLaser__wav);
+			else
+				FlxG.sound.play(AssetPaths.playerShot__wav);
+				
 			if (misil && framesEntreMisil >= 50)
 			{
 				var	nuevoMisil = new Misil(x + (width / 2), y + height / 2);
@@ -160,10 +166,6 @@ class Player extends FlxSprite
 			x = camera.scroll.x + FlxG.width - width;
 		if (x < camera.scroll.x)
 			x = camera.scroll.x;
-		if (y > FlxG.height - 24 - height || y < 0)
-		{
-			preKill();
-		}
 	}
 	
 	public function preKill():Void
@@ -171,6 +173,7 @@ class Player extends FlxSprite
 		if (state == State.Alive)
 		{
 			animation.play("explode");
+			FlxG.sound.play(AssetPaths.playerExploding__wav);
 			state = State.Exploding;
 			laser = false;
 			misil = false;
@@ -193,7 +196,7 @@ class Player extends FlxSprite
 		else
 		{
 			vidas--;
-			reset(camera.x, FlxG.height / 2);
+			reset(camera.x + 32, FlxG.height / 2);
 		}
 	}
 	
@@ -232,6 +235,7 @@ class Player extends FlxSprite
 	/*Collision*/
 	public function powerUpCollision()
 	{
+		FlxG.sound.play(AssetPaths.powerUpPickUp__wav);
 		if (powerUpState < Reg.numberOfPowerUps)
 			powerUpState++;
 		else
@@ -301,7 +305,7 @@ class Player extends FlxSprite
 	{
 		if (state == State.Exploding)
 			return true;
-			else
+		else
 			return false;
 	}
 	/*Boss*/
