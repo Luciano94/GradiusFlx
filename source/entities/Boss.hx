@@ -39,6 +39,7 @@ class Boss extends FlxSprite
 			if (framesEntreBalas >= 100)
 			{
 				var nuevaBala = new BalaBoss (x, y + height / 2);
+				FlxG.sound.play(AssetPaths.playerShot__wav);
 				balasArray.add(nuevaBala);
 				framesEntreBalas = 0;
 			}
@@ -71,4 +72,12 @@ class Boss extends FlxSprite
 		}
 		else life--;
 	}
+	
+	override public function destroy():Void
+	{
+		super.destroy();
+		
+		Reg.gameCleared = true;
+	}
+	
 }

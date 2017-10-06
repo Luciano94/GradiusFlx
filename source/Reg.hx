@@ -10,6 +10,7 @@ class Reg
 	// Game Over & Pause
 	static public var gameOver:Bool = false;
 	static public var paused:Bool = false;
+	static public var gameCleared:Bool = false;
 	// Cosas de Player
 	static public var playerNormalSpeed:Int = 100;
 	static public var playerPowerUpSpeed:Int = 150;

@@ -45,6 +45,7 @@ class PlayState extends FlxState
 	private var highestScore:FlxText;
 	private var paused:FlxText;
 	private var gameOver:FlxText;
+	private var gameCleared:FlxText;
 	/*Camera*/
 	private var guide:FlxSprite;
 	/*Enemies*/
@@ -108,16 +109,19 @@ class PlayState extends FlxState
 		highestScore = new FlxText(0, 225, 256, "Highest: ", 8);
 		paused = new FlxText(0, FlxG.height / 2, 256, "Paused", 12);
 		gameOver = new FlxText(0, FlxG.height / 2, 256, "Game Over", 12);
+		gameCleared = new FlxText(0, FlxG.height / 2, 256, "Game Cleared", 12);
 		
 		lives.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.LEFT);
 		score.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.CENTER);
 		highestScore.setFormat(null, 8, FlxColor.WHITE, FlxTextAlign.RIGHT);
 		paused.setFormat(null, 12, FlxColor.WHITE, FlxTextAlign.CENTER);
 		gameOver.setFormat(null, 12, FlxColor.WHITE, FlxTextAlign.CENTER);
+		gameCleared.setFormat(null, 12, FlxColor.WHITE, FlxTextAlign.CENTER);
 		
 		paused.visible = false;
 		gameOver.visible = false;
 		highestScore.visible = false;
+		gameCleared.visible = false;
 		
 		lives.scrollFactor.x = 0;
 		score.scrollFactor.x = 0;
@@ -246,6 +250,9 @@ class PlayState extends FlxState
 		{
 			gameOver.visible = true;		
 		}
+		
+		if (Reg.gameCleared)
+			gameCleared.visible = true;
 	}
 	/*-----------------------Collision-----------------------*/
 	private function colBulletPlayer(shot: BalaBoss , playa: Player )
