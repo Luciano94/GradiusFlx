@@ -374,7 +374,7 @@ class PlayState extends FlxState
 					player.actMisil();
 				case 4:
 					player.resetPowerUpState();
-					if (op1)
+					if (op1 && !op2)
 					{
 						opt2 = new Options (opt1.x - opt1.width, opt1.y, playerBalas, playerMisiles, opt1);
 						op2 = true;
@@ -382,9 +382,12 @@ class PlayState extends FlxState
 					}	
 					else
 					{
-						opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
-						op1 = true;
-						add(opt1);
+						if (!op1)
+						{
+							opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
+							op1 = true;
+							add(opt1);
+						}
 					}
 				case 5:
 					player.resetPowerUpState();
