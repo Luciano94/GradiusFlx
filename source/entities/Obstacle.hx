@@ -17,7 +17,6 @@ class Obstacle extends FlxSprite
 		
 		randomVelocity = new FlxRandom();
 		speed = randomVelocity.int(-50, -5);
-		velocity.x = speed;
 		outOfBounds = false;
 	}
 	

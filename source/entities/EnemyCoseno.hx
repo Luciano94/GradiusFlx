@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.math.FlxRandom;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
@@ -13,6 +14,8 @@ class EnemyCoseno extends FlxSprite
 	private var hitPoints:Int;
 	private var normalizado:Bool;
 	public var pwUp:FlxTypedGroup<PowerUp>;
+	private var speed:Int;
+	private var randomVelocity:FlxRandom;
 	private var outOfBounds:Bool;
 	
 	public function new(?X:Float = 0, ?Y:Float = 0, ?Normalizado:Bool = true, PwUp:FlxTypedGroup<PowerUp>)
@@ -20,6 +23,7 @@ class EnemyCoseno extends FlxSprite
 		super(X, Y);
 		
 		loadGraphic(AssetPaths.enemyCoseno__png, true, 32, 16);
+		randomVelocity = new FlxRandom();
 		normalizado = Normalizado;
 		
 		if (normalizado)
@@ -37,6 +41,7 @@ class EnemyCoseno extends FlxSprite
 		offset.set(8, 1);
 		pwUp = PwUp;
 		outOfBounds = false;
+		speed = randomVelocity.int(-75, -50);
 		
 		hitPoints = Reg.enemyCShp;
 		//	FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the whole freaking game!
@@ -48,7 +53,7 @@ class EnemyCoseno extends FlxSprite
 		
 		if (x < camera.scroll.x + FlxG.width + 16)
 		{
-			velocity.x = -50;
+			velocity.x = speed;
 		}
 		checkBoundaries();
 	}
