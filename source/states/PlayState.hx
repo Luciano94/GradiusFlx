@@ -149,7 +149,9 @@ class PlayState extends FlxState
 		add(score);
 		add(highestScore);
 		add(paused);
-		add(gameOver);	
+		add(gameOver);
+		
+		FlxG.sound.play(AssetPaths.theme__wav, 1, true);
 	}
 	
 	private function entityCreator(entityName:String, entityData:Xml):Void
@@ -242,7 +244,7 @@ class PlayState extends FlxState
 		
 		if (Reg.gameOver)
 		{
-			gameOver.visible = true;
+			gameOver.visible = true;		
 		}
 	}
 	/*-----------------------Collision-----------------------*/
