@@ -192,6 +192,9 @@ class PlayState extends FlxState
 			{
 				guide.velocity.x = 0;
 				player.setBoss();
+				if (op1) opt1.setBoss();
+				if (op2) opt2.setBoss();
+				pwUpBar.velocity.x = 0;
 			}
 			
 			/*Power UP*/
@@ -218,6 +221,9 @@ class PlayState extends FlxState
 			FlxG.overlap(bosito, player, colBossPlayer);
 			FlxG.overlap(obstacles, player, obstaclePlayerCollision);
 			FlxG.collide(tilemap, player, tilemapPlayerCollision);
+			FlxG.overlap(bossBalas, player, colBulletPlayer);
+			FlxG.overlap(enemyInmovilBalas, player, colBulletEnePlayer);
+			
 		}
 		
 		lives.text = "Lives: " + player.vidas;
@@ -239,9 +245,24 @@ class PlayState extends FlxState
 			gameOver.visible = true;
 		}
 	}
-
 	/*-----------------------Collision-----------------------*/
+	private function colBulletPlayer(shot: BalaBoss , playa: Player )
+	{
+		shot.destroy();
+		if (player.isShielded())
+			player.descShield();
+		else
+			player.preKill();
+	}
 	
+	private function colBulletEnePlayer(shot: BalaEne , playa: Player )
+	{
+		shot.destroy();
+		if (player.isShielded())
+			player.descShield();
+		else
+			player.preKill();
+	}
 	/*Tilemap*/
 	
 	private	function tilemapPlayerCollision(tilemap:FlxTilemap, player:Player):Void
