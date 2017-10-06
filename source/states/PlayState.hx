@@ -71,7 +71,7 @@ class PlayState extends FlxState
 		loader = new FlxOgmoLoader(AssetPaths.Level__oel);
 		tilemap = loader.loadTilemap(AssetPaths.tiles__png, 16, 16, "Tiles");
 		tilemap.setTileProperties(0, FlxObject.NONE);
-		for (i in 1...18)	// Find a way to avoid hard-coding this.
+		for (i in 1...19)	// Find a way to avoid hard-coding this.
 		{
 			tilemap.setTileProperties(i, FlxObject.ANY);
 		}
