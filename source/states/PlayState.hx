@@ -141,6 +141,7 @@ class PlayState extends FlxState
 		add(pwUpBar);
 		add(enemyPerseguidor);
 		add(enemyInmovil);
+		add(enemyInmovilBalas);
 		add(enemyCoseno);
 		add(enemyInmovilBalas);
 		add(obstacles);
@@ -168,7 +169,7 @@ class PlayState extends FlxState
 				var cosineEnemy = new EnemyCoseno(x, y, false, pwUp);
 				enemyCoseno.add(cosineEnemy);
 			case "StaticEnemies":
-				var staticEnemy = new EnemyInmovil(x, y, false, pwUp);
+				var staticEnemy = new EnemyInmovil(x, y, false, pwUp, enemyInmovilBalas);
 				enemyInmovil.add(staticEnemy);
 			case "ChasingEnemies":
 				var chasingEnemy = new EnemyPerseguidor(x, y, false, pwUp);
