@@ -142,6 +142,7 @@ class PlayState extends FlxState
 		add(enemyPerseguidor);
 		add(enemyInmovil);
 		add(enemyCoseno);
+		add(enemyInmovilBalas);
 		add(obstacles);
 		//add(bosito);
 		add(bositoBar);
@@ -286,7 +287,10 @@ class PlayState extends FlxState
 	{
 		obstacles.remove(obstacle, true);
 		obstacle.destroy();
-		player.preKill();
+		if (player.isShielded())
+			player.descShield();
+		else
+			player.preKill();		
 	}
 	
 	private function damageEnemyInmovil(shot, enemy:EnemyInmovil):Void

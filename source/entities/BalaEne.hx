@@ -11,6 +11,7 @@ class BalaEne extends FlxSprite
 	{
 		super(X, Y, SimpleGraphic);
 		loadGraphic(AssetPaths.balaEne__png, false	, 4, 4);
+		velocity.x = -10;
 	}
 	
 	override public function update (elapsed:Float):Void

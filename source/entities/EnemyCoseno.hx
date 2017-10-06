@@ -37,10 +37,11 @@ class EnemyCoseno extends FlxSprite
 		pwUp = PwUp;
 		
 		hitPoints = Reg.enemyCShp;
-		velocity.y = Reg.enemyCSpeedY;
-		velocity.x = Reg.enemyCSpeedX;
-		FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the collision.
+		//velocity.y = Reg.enemyCSpeedY;
+		velocity.x = -Reg.enemyCSpeedX;
+		//	FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the collision.
 	}
+
 	
 	public function getDamage():Void
 	{
