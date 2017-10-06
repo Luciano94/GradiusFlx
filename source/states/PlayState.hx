@@ -55,7 +55,7 @@ class PlayState extends FlxState
 	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
 	/*Obstacles*/
 	private var obstacles:FlxTypedGroup<Obstacle>;
-	private var  bosito:Boss;
+	private var bosito:Boss;
 	private var bossBalas:FlxTypedGroup<BalaBoss>;
 	private var loader:FlxOgmoLoader;
 	private var bositoBar:FlxBar;
@@ -128,6 +128,7 @@ class PlayState extends FlxState
 		highestScore.scrollFactor.x = 0;
 		paused.scrollFactor.x = 0;
 		gameOver.scrollFactor.x = 0;
+		gameCleared.scrollFactor.x = 0;
 		
 		/*ADD*/
 		add(tilemap);
@@ -154,6 +155,7 @@ class PlayState extends FlxState
 		add(highestScore);
 		add(paused);
 		add(gameOver);
+		add(gameCleared);
 		
 		FlxG.sound.play(AssetPaths.theme__wav, 1, true);
 	}
@@ -189,7 +191,7 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		if (!Reg.gameOver && !Reg.paused)
+		if (!Reg.gameOver && !Reg.paused && !Reg.gameCleared)
 		{
 			super.update(elapsed);
 			
@@ -252,7 +254,10 @@ class PlayState extends FlxState
 		}
 		
 		if (Reg.gameCleared)
+		{
 			gameCleared.visible = true;
+			Reg.highestScore = Reg.score;
+		}
 	}
 	/*-----------------------Collision-----------------------*/
 	private function colBulletPlayer(shot: BalaBoss , playa: Player )
