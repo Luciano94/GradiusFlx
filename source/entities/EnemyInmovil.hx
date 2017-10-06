@@ -53,7 +53,6 @@ class EnemyInmovil extends FlxSprite //Este enemigo dispara pero no se mueve
 			timeBtwLaser = 0;
 			disparo();
 		}
-		
 	}
 	
 	private function disparo():Void 
