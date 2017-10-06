@@ -17,6 +17,9 @@ class Reg
 	static public var playerBalaSpeed:Int = 250;
 	static public var playerFramesEntreBala:Int = 0;
 	static public var playerRef:Player;
+	// Cosas de Boss
+	static public var bossNormalSpeed:Int = 1;
+	static public var bossFramesEntreBalas:Int = 0;
 	// Cosas de EnemyInmovil
 	static public var enemyBalaSpeed:Int = 60;
 	static public var timer:Float = 0;

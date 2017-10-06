@@ -166,6 +166,10 @@ class Player extends FlxSprite
 		{
 			animation.play("explode");
 			state = State.Exploding;
+			laser = false;
+			misil = false;
+			shield = false;
+			speed = Reg.playerNormalSpeed;
 		}
 	}
 	
@@ -213,7 +217,8 @@ class Player extends FlxSprite
 	/*Collision*/
 	public function powerUpCollision()
 	{
-		powerUpState++;
+		if (powerUpState < 5) powerUpState++;
+		else powerUpState = 5;
 	}
 	
 	/*Spped*/
@@ -273,5 +278,13 @@ class Player extends FlxSprite
 	public function resetPowerUpState()
 	{
 		powerUpState = 0;
+	}
+	
+	public function getState():Bool
+	{
+		if (state == State.Exploding)
+			return true;
+			else
+			return false;
 	}
 }

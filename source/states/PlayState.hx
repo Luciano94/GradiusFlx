@@ -20,6 +20,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
+import flixel.ui.FlxBar;
 
 class PlayState extends FlxState
 {
@@ -29,6 +30,8 @@ class PlayState extends FlxState
 	/*powerUps*/
 	private var opt1:Options;
 	private var opt2:Options;
+	private var op1:Bool;
+	private var op2:Bool;
 	private var pwUp:FlxTypedGroup<PowerUp>;
 	private var powerUpState:Int;
 	public var playerMisiles:FlxTypedGroup<Misil>;
@@ -46,6 +49,9 @@ class PlayState extends FlxState
 	public var enemyPerseguidor:FlxTypedGroup<EnemyPerseguidor>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
+	public var  bosito:Boss;
+	private var bossBalas:FlxTypedGroup<BalaEne>;
+	private var bositoBar:FlxBar;
 	private var tilemap:FlxTilemap;
 	private var loader:FlxOgmoLoader;
 	
@@ -65,7 +71,9 @@ class PlayState extends FlxState
 		background = new FlxSprite(0, 0, AssetPaths.background__png);
 		
 		/*Power UP*/
-		pwUpBar = new PwUpBar(1,180);
+		pwUpBar = new PwUpBar(1, 180);
+		op1 = false;
+		op2 = false;
 		pwUp = new FlxTypedGroup<PowerUp>();
 		pwUp.add(new PowerUp(100, 100));
 		pwUp.add(new PowerUp(200, 100));
@@ -82,6 +90,8 @@ class PlayState extends FlxState
 		enemyPerseguidor = new FlxTypedGroup<EnemyPerseguidor>();
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyCoseno = new FlxTypedGroup<EnemyCoseno>();
+		bossBalas = new FlxTypedGroup<BalaEne>();
+		bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
 
 		
 		/*HUD*/
@@ -113,6 +123,7 @@ class PlayState extends FlxState
 		add(guide);
 		add(playerBalas);
 		add(playerMisiles);
+		add(bossBalas);
 		add(pwUp);
 		add(pwUpBar);
 		add(enemyPerseguidor);
@@ -154,23 +165,29 @@ class PlayState extends FlxState
 		if (!Reg.gameOver && !Reg.paused)
 		{
 			super.update(elapsed);
-			
+			/*Camera*/
+			if (FlxG.overlap(guide, bosito))
+			{
+				guide.velocity.x = 0;
+				player.setBoss();
+			}
 			/*Power UP*/
 			sistemaPowerUp();
-			
+			checkOptions();
 			/*Collisions*/
 			FlxG.overlap(pwUp, player, colPwUpPlayer);
 			FlxG.overlap(player.get_balaArray(), enemyInmovil, damageEnemyInmovil);
 			FlxG.overlap(player.get_balaArray(), enemyCoseno, damageEnemyCoseno);
 			FlxG.overlap(player.get_balaArray(), enemyPerseguidor, damageEnemyPerseguidor);
-			if (FlxG.overlap(enemyInmovil, player))
-				player.preKill();
-			if (FlxG.overlap(enemyPerseguidor, player))
-				player.preKill();
-			if (FlxG.overlap(enemyCoseno, player))
-				player.preKill();
-			
-			
+			FlxG.overlap(player.get_balaArray(), bosito, damageBosito);
+			FlxG.overlap(player.get_misilArray(), enemyInmovil, colmisilEneInm);
+			FlxG.overlap(player.get_misilArray(), enemyCoseno, colMisilEnemyCoseno);
+			FlxG.overlap(player.get_misilArray(), enemyPerseguidor, colMisilEnemyPerseguidor);
+			FlxG.overlap(player.get_misilArray(), bosito, colMisilBosito);
+			FlxG.overlap(enemyInmovil, player, colEneInPlayer);
+			FlxG.overlap(enemyPerseguidor, player, colEnePerPlayer);
+			FlxG.overlap(enemyCoseno, player, colEneCosPlayer);
+			FlxG.overlap(bosito, player, colBossPlayer);
 		}
 		lives.text = "Lives: " + player.vidas;
 		score.text = "Score: " + Reg.score;
@@ -192,10 +209,82 @@ class PlayState extends FlxState
 	}
 
 	/*-----------------------Collision-----------------------*/
+	private function checkOptions():Void 
+	{
+		if (op1 && player.getState())
+		{
+			opt1.destroy();
+			op1 = false;
+		}
+		if (op2 && player.getState())
+		{
+			opt2.destroy();
+			op2 = false;
+		}
+	}
+	
+	private function colmisilEneInm(shot:Misil, enemy:EnemyInmovil):Void
+	{
+		Reg.score += 10;
+		shot.destroy();
+		enemy.destroy();
+	}
+	
+	private function colMisilEnemyCoseno(shot:Misil, enemy:EnemyCoseno):Void
+	{
+		Reg.score += 20;
+		shot.destroy();
+		if (player.isLaser())
+			enemy.destroy();
+		else
+	    	enemy.getDamage();		
+	}
+	
+	private function colMisilEnemyPerseguidor(shot:Misil, enemy:EnemyPerseguidor):Void 
+	{
+		Reg.score += 30;
+		shot.destroy();
+		enemy.destroy();
+	}
+	
+	private function colMisilBosito(shot:Misil, bosito:Boss):Void
+	{
+		shot.destroy();
+		bosito.getDamage();
+	}
+	
+	private function colBossPlayer(bos:Boss, pl:Player):Void
+	{
+		pl.preKill();
+	}
+	
+	private function colEneInPlayer(ene:EnemyInmovil, pl:Player):Void
+	{
+		ene.kill();
+		pl.preKill();
+	}
+	
+	private function colEnePerPlayer(ene:EnemyPerseguidor, pl:Player):Void
+	{
+		ene.kill();
+		pl.preKill();
+	}
+	
+	private function colEneCosPlayer(ene:EnemyCoseno, pl:Player):Void
+	{
+		ene.kill();
+		pl.preKill();
+	}
+	
+	private function damageBosito(shot:Bala, bosito:Boss):Void
+	{
+		shot.destroy();
+		bosito.getDamage();
+	}
 	/*PwUp*/
 	private function colPwUpPlayer(power:PowerUp, playa:Player):Void
 	{
-		player.powerUpCollision();
+		playa.powerUpCollision();
 		power.kill();
 	}
 	
@@ -255,14 +344,16 @@ class PlayState extends FlxState
 					player.actMisil();
 				case 4:
 					player.resetPowerUpState();
-					if (opt1 != null)
+					if (op1)
 					{
 						opt2 = new Options (opt1.x - opt1.width, opt1.y, playerBalas, playerMisiles, opt1);
+						op2 = true;
 						add(opt2);
 					}	
 					else
 					{
 						opt1 = new Options (player.x - player.width, player.y, playerBalas, playerMisiles, player);
+						op1 = true;
 						add(opt1);
 					}
 				case 5:
