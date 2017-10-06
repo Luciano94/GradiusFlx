@@ -50,7 +50,7 @@ class PlayState extends FlxState
 	public var enemyCoseno:FlxTypedGroup<EnemyCoseno>;
 	public var enemyInmovil:FlxTypedGroup<EnemyInmovil>;
 	public var enemyInmovilBalas:FlxTypedGroup<BalaEne>;
-	public var  bosito:Boss;
+	//public var  bosito:Boss;
 	private var bossBalas:FlxTypedGroup<BalaEne>;
 	private var tilemap:FlxTilemap;
 	private var loader:FlxOgmoLoader;
@@ -96,7 +96,7 @@ class PlayState extends FlxState
 		enemyInmovil = new FlxTypedGroup<EnemyInmovil>();
 		enemyInmovilBalas = new FlxTypedGroup<BalaEne>();
 		bossBalas = new FlxTypedGroup<BalaEne>();
-		bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
+		//bosito = new Boss(FlxG.width - 64, FlxG.height / 2, bossBalas);
 		
 		/*TEXT*/
 		lives = new FlxText(0, 225, 256, "Lives: ", 8);
@@ -176,11 +176,11 @@ class PlayState extends FlxState
 		{
 			super.update(elapsed);
 			/*Camera*/
-			if (FlxG.overlap(guide, bosito))
-			{
-				guide.velocity.x = 0;
-				player.setBoss();
-			}
+			//if (FlxG.overlap(guide, bosito))
+			//{
+			//	guide.velocity.x = 0;
+			//	player.setBoss();
+			//}
 			/*Power UP*/
 			sistemaPowerUp();
 			checkOptions();
@@ -193,15 +193,15 @@ class PlayState extends FlxState
 			FlxG.overlap(player.get_balaArray(), enemyInmovil, damageEnemyInmovil);
 			FlxG.overlap(player.get_balaArray(), enemyCoseno, damageEnemyCoseno);
 			FlxG.overlap(player.get_balaArray(), enemyPerseguidor, damageEnemyPerseguidor);
-			FlxG.overlap(player.get_balaArray(), bosito, damageBosito);
+			//FlxG.overlap(player.get_balaArray(), bosito, damageBosito);
 			FlxG.overlap(player.get_misilArray(), enemyInmovil, colmisilEneInm);
 			FlxG.overlap(player.get_misilArray(), enemyCoseno, colMisilEnemyCoseno);
 			FlxG.overlap(player.get_misilArray(), enemyPerseguidor, colMisilEnemyPerseguidor);
-			FlxG.overlap(player.get_misilArray(), bosito, colMisilBosito);
+			//FlxG.overlap(player.get_misilArray(), bosito, colMisilBosito);
 			FlxG.overlap(enemyInmovil, player, colEneInPlayer);
 			FlxG.overlap(enemyPerseguidor, player, colEnePerPlayer);
 			FlxG.overlap(enemyCoseno, player, colEneCosPlayer);
-			FlxG.overlap(bosito, player, colBossPlayer);
+			//FlxG.overlap(bosito, player, colBossPlayer);
 		}
 		
 		lives.text = "Lives: " + player.vidas;

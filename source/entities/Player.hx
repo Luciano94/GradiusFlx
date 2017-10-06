@@ -21,6 +21,8 @@ class Player extends FlxSprite
 	private var balaArray:FlxTypedGroup<Bala>;
 	public var bala(get, null):Bala;
 	private var state:State;
+	/*Boss*/
+	private var boss:Bool;
 	/*Power Ups*/
 	private var faster:Int;
 	private var shield: Bool;
@@ -53,6 +55,7 @@ class Player extends FlxSprite
 		shield = false;
 		laser = false;
 		misil = false;
+		boss = false;
 		/*Animations*/
 		animation.add("idle", [0, 1, 2], 6, true);
 		animation.add("moveUp", [5]);
@@ -75,7 +78,10 @@ class Player extends FlxSprite
 		switch (state) 
 		{
 			case State.Alive:
-				velocity.set(Reg.cameraSpeed, 0);
+				if (!boss)
+					velocity.set(Reg.cameraSpeed, 0);
+				else
+					velocity.set(0, 0);
 				framesEntreBala++;
 				framesEntreMisil++;
 				if (shield)
@@ -218,6 +224,10 @@ class Player extends FlxSprite
 		return balaArray;
 	}
 	
+	public function get_misilArray():FlxTypedGroup<Misil>
+	{
+		return misilArray;
+	}
 	/*-----------------------Power Up-----------------------*/
 	/*Collision*/
 	public function powerUpCollision()
@@ -293,5 +303,10 @@ class Player extends FlxSprite
 			return true;
 			else
 			return false;
+	}
+	/*Boss*/
+	public function setBoss():Void
+	{
+		boss = true;
 	}
 }
