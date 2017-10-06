@@ -10,6 +10,7 @@ class EnemyPerseguidor extends FlxSprite
 {
 	private var normalizado:Bool;
 	public var pwUp:FlxTypedGroup<PowerUp>;
+	private var outOfBounds:Bool;
 	
 	public function new(?X:Float = 0, ?Y:Float = 0, ?Normalizado:Bool = true, PwUp:FlxTypedGroup<PowerUp>)
 	{
@@ -21,6 +22,7 @@ class EnemyPerseguidor extends FlxSprite
 		height = 14;
 		offset.set(9, 1);
 		normalizado = Normalizado;
+		outOfBounds = false;
 		pwUp = PwUp;
 		
 		animation.add("idle", [0]);
@@ -41,49 +43,65 @@ class EnemyPerseguidor extends FlxSprite
 		super.update(elapsed);
 		
 		movimiento();
+		checkBoundaries();
 	}
 	
 	public function movimiento():Void 
-	{
-		if (y >= Reg.playerRef.y + 2)
-		{
-			velocity.x = -Reg.enemySpeedX;
-			velocity.y = -Reg.enemySpeedY;
-			if(normalizado)
-				animation.play("arriba");
-			else
-				animation.play("arribaP");
-		}
-		else 
-			if (y <= Reg.playerRef.y - 2)
+	{	
+		if (x < camera.scroll.x + FlxG.width + 16)
+		{	
+			if (y >= Reg.playerRef.y + 2)
 			{
 				velocity.x = -Reg.enemySpeedX;
-				velocity.y = Reg.enemySpeedY;
+				velocity.y = -Reg.enemySpeedY;
 				if(normalizado)
-					animation.play("abajo");
+					animation.play("arriba");
 				else
-					animation.play("abajoP");
+					animation.play("arribaP");
 			}
-			else
-			{
-				velocity.x = -Reg.enemySpeedX * 2.5;
-				velocity.y = 0;
-				if(normalizado)
-					animation.play("idle");
+			else 
+				if (y <= Reg.playerRef.y - 2)
+				{
+					velocity.x = -Reg.enemySpeedX;
+					velocity.y = Reg.enemySpeedY;
+					if(normalizado)
+						animation.play("abajo");
+					else
+						animation.play("abajoP");
+				}
 				else
-					animation.play("idleP");
-			}
+				{
+					velocity.x = -Reg.enemySpeedX * 2.5;
+					velocity.y = 0;
+					if(normalizado)
+						animation.play("idle");
+					else
+						animation.play("idleP");
+				}
+		}
+	}
+	
+	private function checkBoundaries():Void
+	{
+		if (x < camera.scroll.x - FlxG.width)
+		{
+			outOfBounds = true;
+			destroy();
+		}
 	}
 	
 	override public function destroy():Void
 	{
 		super.destroy();
 		
-		FlxG.sound.play(AssetPaths.enemyExploding__wav);
-		if (!normalizado)
+		if (!outOfBounds)
 		{
-		var nuevoPowerUp = new PowerUp(x, y);
-		pwUp.add(nuevoPowerUp);
+			FlxG.sound.play(AssetPaths.enemyExploding__wav);
+			if (!normalizado)
+			{
+				var nuevoPowerUp = new PowerUp(x, y);
+				pwUp.add(nuevoPowerUp);
+			}
 		}
 	}
 }

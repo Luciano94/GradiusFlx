@@ -188,7 +188,7 @@ class PlayState extends FlxState
 			super.update(elapsed);
 			
 			/*Camera*/
-			if (FlxG.overlap(guide, bosito))
+			if (camera.scroll.x >= 7680 - FlxG.width)
 			{
 				guide.velocity.x = 0;
 				player.setBoss();

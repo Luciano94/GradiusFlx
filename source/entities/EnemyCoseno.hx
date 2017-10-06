@@ -13,6 +13,7 @@ class EnemyCoseno extends FlxSprite
 	private var hitPoints:Int;
 	private var normalizado:Bool;
 	public var pwUp:FlxTypedGroup<PowerUp>;
+	private var outOfBounds:Bool;
 	
 	public function new(?X:Float = 0, ?Y:Float = 0, ?Normalizado:Bool = true, PwUp:FlxTypedGroup<PowerUp>)
 	{
@@ -35,14 +36,23 @@ class EnemyCoseno extends FlxSprite
 		height = 14;
 		offset.set(8, 1);
 		pwUp = PwUp;
+		outOfBounds = false;
 		
 		hitPoints = Reg.enemyCShp;
-		//velocity.y = Reg.enemyCSpeedY;
-		velocity.x = -Reg.enemyCSpeedX;
-		//	FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the collision.
+		//	FlxTween.tween(velocity, {y: 120}, 1.5, {type: FlxTween.PINGPONG, ease: FlxEase.sineInOut});	//This is messing with the whole freaking game!
+	}
+	
+	override public function update(elapsed:Float):Void
+	{
+		super.update(elapsed);
+		
+		if (x < camera.scroll.x + FlxG.width + 16)
+		{
+			velocity.x = -50;
+		}
+		checkBoundaries();
 	}
 
-	
 	public function getDamage():Void
 	{
 		hitPoints--;
@@ -52,15 +62,27 @@ class EnemyCoseno extends FlxSprite
 			FlxG.sound.play(AssetPaths.damageEnemy__wav);
 	}
 	
+	private function checkBoundaries():Void
+	{
+		if (x < camera.scroll.x - FlxG.width)
+		{
+			outOfBounds = true;
+			destroy();
+		}
+	}
+	
 	override public function destroy():Void
 	{
 		super.destroy();
 		
-		FlxG.sound.play(AssetPaths.enemyExploding__wav);
-		if (!normalizado)
+		if (!outOfBounds)
 		{
-			var nuevoPowerUp = new PowerUp(x, y);
-			pwUp.add(nuevoPowerUp);
+			FlxG.sound.play(AssetPaths.enemyExploding__wav);
+			if (!normalizado)
+			{
+				var nuevoPowerUp = new PowerUp(x, y);
+				pwUp.add(nuevoPowerUp);
+			}
 		}
 	}
 }
