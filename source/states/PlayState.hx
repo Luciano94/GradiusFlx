@@ -130,7 +130,7 @@ class PlayState extends FlxState
 		loader.loadEntities(entityCreator, "Entities");
 		
 		/*BOSS*/
-		bositoBar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 30, -5, bosito, "life", 0, 100, true);
+		bositoBar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 30, 5, bosito, "life", 0, 100, true);
 		
 		/*ADD*/
 		add(guide);
@@ -201,8 +201,8 @@ class PlayState extends FlxState
 			sistemaPowerUp();
 			checkOptions();
 			
-			bositoBar.x = player.x + 16;
-			bositoBar.y = player.y + 5;
+			bositoBar.x = bosito.x + 16;
+			bositoBar.y = bosito.y + 5;
 			
 			/*Collisions*/
 			FlxG.overlap(pwUp, player, colPwUpPlayer);

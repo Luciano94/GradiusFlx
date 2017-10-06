@@ -3,7 +3,7 @@ import entities.Player;
 
 class Reg 
 {	// Cosas de Camara
-	static public var cameraSpeed:Int = 50;
+	static public var cameraSpeed:Int = 70;
 	// Score
 	static public var score:Int = 0;
 	static public var highestScore:Int = 0;
