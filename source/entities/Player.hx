@@ -38,6 +38,7 @@ class Player extends FlxSprite
 		
 		/*Graphic*/
 		loadGraphic(AssetPaths.spaceship1__png, true, 32, 24);
+		pixelPerfectPosition = false;
 		/*Speed*/
 		speed = Reg.playerNormalSpeed;
 		/*State*/
