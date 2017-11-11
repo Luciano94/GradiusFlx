@@ -91,6 +91,7 @@ class PlayState extends FlxState
 		guide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
 		guide.makeGraphic(1, 1, 0x00000000);
 		guide.velocity.x = Reg.cameraSpeed;
+		camera.pixelPerfectRender = false;
 		FlxG.camera.follow(guide);
 		
 		/*ENEMIES*/
